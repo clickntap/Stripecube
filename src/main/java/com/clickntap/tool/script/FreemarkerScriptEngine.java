@@ -24,6 +24,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.Version;
 
 public class FreemarkerScriptEngine implements ScriptEngine {
 
@@ -51,10 +52,11 @@ public class FreemarkerScriptEngine implements ScriptEngine {
 	}
 
 	public void start() throws Exception {
-		ftl = new Configuration();
+		Version version = Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS;
+		ftl = new Configuration(version);
 		ftl.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX);
 		ftl.setDefaultEncoding(ConstUtils.UTF_8);
-		ftl.setObjectWrapper(new BeansWrapper());
+		ftl.setObjectWrapper(new BeansWrapper(version));
 		ftl.setNumberFormat("computer");
 		ftl.setURLEscapingCharset(ConstUtils.UTF_8);
 		ftl.setOutputEncoding(ConstUtils.UTF_8);
