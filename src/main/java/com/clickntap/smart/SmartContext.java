@@ -266,11 +266,6 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 		return authenticator == null ? false : authenticator.isAuthenticated(request, response);
 	}
 
-	public AuthenticatedUser getUser() throws Exception {
-		Number id = getUserId();
-		return (AuthenticatedUser) authenticator.getBeanManager().read(id, Class.forName(authenticator.getClassName()));
-	}
-
 	public Number getUserId() {
 		return (Number) session.getAttribute(SMART_USER_ID);
 	}
@@ -319,7 +314,8 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	}
 
 	public void logout() throws Exception {
-		authenticator.logout(request, response, getUser());
+		Number id = getUserId();
+		authenticator.logout(request, response, (AuthenticatedUser) authenticator.getBeanManager().read(id, Class.forName(authenticator.getClassName())));
 		authenticator.deauthorize(request, response);
 	}
 
