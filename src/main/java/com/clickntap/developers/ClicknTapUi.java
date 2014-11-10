@@ -87,7 +87,7 @@ public class ClicknTapUi {
 			String name = doc.getRootElement().attributeValue("project");
 			for (Element element : loads) {
 				if (type.equals(element.attributeValue("type"))) {
-					File[] files = new File("../Stripecube/webmeta/" + type).listFiles();
+					File[] files = new File(getWebmetaDir(type)).listFiles();
 					String lib = element.attributeValue("lib");
 					String libName = null;
 					for (File file : files) {
@@ -97,7 +97,7 @@ public class ClicknTapUi {
 								libName = FilenameUtils.getBaseName(file.getName());
 								try {
 									String[] requiredFonts = StringUtil.split(element.attributeValue("fonts"), ',');
-									File[] fonts = new File("../Stripecube/webmeta/fonts").listFiles();
+									File[] fonts = new File(getWebmetaDir("fonts")).listFiles();
 									File destDir = new File(folder + name + "/fonts");
 									for (File font : fonts) {
 										for (String requiredFont : requiredFonts) {
@@ -141,6 +141,10 @@ public class ClicknTapUi {
 				FileUtils.writeStringToFile(out, code.toString());
 			}
 		}
+	}
+
+	private static String getWebmetaDir(String type) {
+		return "../../../git/Stripecube/webmeta/" + type;
 	}
 
 	private static String moveImportToHead(String code) {
