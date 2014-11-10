@@ -48,7 +48,7 @@ public class ClicknTapUi {
 	}
 
 	public static void sync(final String accessKey, final String secretKey, final String bucketName) throws Exception {
-		ClicknTapUi.sync(accessKey, secretKey, bucketName, "ui/ui.xml");
+		ClicknTapUi.sync(accessKey, secretKey, bucketName, "src/main/webapp/ui/ui.xml");
 	}
 
 	protected static void syncUiDir(Map<String, String> crcMap, String accessKey, String secretKey, String bucketName, String confFile) throws Exception {
