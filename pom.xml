@@ -65,7 +65,7 @@
          -->
 
 		<!-- Turn of the silly Java 8 Javadoc linter. -->
-		<additionalparam>-Xdoclint:none</additionalparam>
+		<!-- <additionalparam>-Xdoclint:none</additionalparam> -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -359,9 +359,6 @@
 								<goals>
 									<goal>jar</goal>
 								</goals>
-								<configuration>
-									<additionalparam>-Xdoclint:none</additionalparam>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
