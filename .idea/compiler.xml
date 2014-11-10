@@ -25,6 +25,8 @@
         <module name="Stripecube" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Stripecube" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-
