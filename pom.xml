@@ -6,7 +6,6 @@
 	<artifactId>Stripecube</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
