@@ -6,6 +6,10 @@
 	<artifactId>Stripecube</artifactId>
 	<version>1.3-SNAPSHOT</version>
 
+	<name>Stripecube</name>
+	<description>Stripecube is an open source Java framework for Web Applications</description>
+	<url>https://github.com/clickntap/Stripecube</url>
+
 	<prerequisites>
 		<maven>3.0.3</maven>
 	</prerequisites>

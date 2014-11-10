@@ -1,3 +1,7 @@
 /target
 
 *.releaseBackup
+
+release.properties
+
+release.properties
