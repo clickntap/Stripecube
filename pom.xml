@@ -4,7 +4,7 @@
 
 	<groupId>com.clickntap</groupId>
 	<artifactId>Stripecube</artifactId>
-	<version>1.6-SNAPSHOT</version>
+	<version>1.7-SNAPSHOT</version>
 
 	<name>Stripecube</name>
 	<description>Stripecube is an open source Java framework for Web Applications</description>
