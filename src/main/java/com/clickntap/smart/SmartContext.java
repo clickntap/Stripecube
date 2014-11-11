@@ -60,7 +60,7 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	private Exception exception;
 
 	public String getVersion() {
-		return "2.4 (292)";
+		return "1.6";
 	}
 
 	public JSONArray toJsonArray(String array) {
