@@ -10,8 +10,6 @@ import java.util.Map;
 
 import org.springframework.core.io.Resource;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import com.clickntap.utils.ConstUtils;
 
 import freemarker.cache.ClassTemplateLoader;
@@ -104,7 +102,7 @@ public class FreemarkerScriptEngine implements ScriptEngine {
 	}
 
 	public boolean evalRule(Map<String, Object> context, String templateName) throws Exception {
-		throw new NotImplementedException();
+		throw new Exception();
 	}
 
 	public boolean evalRuleScript(Map<String, Object> context, String rule) throws Exception {
@@ -121,7 +119,7 @@ public class FreemarkerScriptEngine implements ScriptEngine {
 	}
 
 	public void evalScript(Map<String, Object> ctx, String script, OutputStream out) throws Exception {
-		throw new NotImplementedException();
+		throw new Exception();
 	}
 
 }

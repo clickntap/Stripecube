@@ -7,8 +7,6 @@ import java.net.URL;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class HttpFile implements MultipartFile {
 
 	private InputStream inputStream;
@@ -22,11 +20,11 @@ public class HttpFile implements MultipartFile {
 	}
 
 	public byte[] getBytes() throws IOException {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public String getContentType() {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public InputStream getInputStream() throws IOException {
@@ -34,15 +32,15 @@ public class HttpFile implements MultipartFile {
 	}
 
 	public String getName() {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public String getOriginalFilename() {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public long getSize() {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public boolean isEmpty() {
@@ -50,7 +48,7 @@ public class HttpFile implements MultipartFile {
 	}
 
 	public void transferTo(File arg0) throws IOException, IllegalStateException {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 }

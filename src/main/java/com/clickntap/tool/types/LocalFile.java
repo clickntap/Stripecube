@@ -7,8 +7,6 @@ import java.io.InputStream;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class LocalFile implements MultipartFile {
 
 	private String name;
@@ -29,7 +27,7 @@ public class LocalFile implements MultipartFile {
 	}
 
 	public byte[] getBytes() throws IOException {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public String getContentType() {
@@ -59,11 +57,11 @@ public class LocalFile implements MultipartFile {
 	}
 
 	public boolean isEmpty() {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 	public void transferTo(File dest) throws IOException, IllegalStateException {
-		throw new NotImplementedException();
+		throw new RuntimeException();
 	}
 
 }
