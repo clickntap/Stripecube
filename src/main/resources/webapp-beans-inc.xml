@@ -11,7 +11,7 @@
 		<property name="docRoot" value="/" />
 	</bean>
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
-		<property name="location" value="classpath:com/clickntap/smart/webapp-views.xml" />
+		<property name="location" value="classpath:webapp-views.xml" />
 	</bean>
 	<bean id="evalEngine" class="com.clickntap.tool.script.FreemarkerScriptEngine" init-method="start">
 		<property name="templateDir" value="${smartAppTemplateDir}" />
