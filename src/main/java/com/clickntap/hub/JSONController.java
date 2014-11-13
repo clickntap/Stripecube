@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -16,6 +17,9 @@ public class JSONController extends MultiActionController {
 
 	private BOManager app;
 	private JdbcManager jdbcManager;
+
+	private static org.apache.commons.logging.Log log = LogFactory
+			.getLog(JSONController.class);
 
 	public BOManager getApp() {
 		return app;
@@ -59,7 +63,7 @@ public class JSONController extends MultiActionController {
 			res.put("stackTrace", out.toString("UTF-8"));
 			handleRequest(response, res);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 	}
 }
