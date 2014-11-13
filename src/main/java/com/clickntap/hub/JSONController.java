@@ -54,6 +54,7 @@ public class JSONController extends MultiActionController {
 
 	protected void handleException(HttpServletResponse response, Throwable throwable) {
 		try {
+			log.error(throwable.getMessage(), throwable);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			PrintWriter writer = new PrintWriter(out);
 			throwable.printStackTrace(writer);
