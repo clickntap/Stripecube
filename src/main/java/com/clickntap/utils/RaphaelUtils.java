@@ -32,17 +32,13 @@ public class RaphaelUtils {
 		sb.append("var ").append(container);
 		sb.append(" = Raphael('");
 		sb.append(container);
-		sb.append("',");
-		sb.append(doc.getRootElement().attributeValue("width"));
-		sb.append(",");
-		sb.append(doc.getRootElement().attributeValue("height"));
-		sb.append(");\n");
+		sb.append("',100%,100%);\n");
 		sb.append(container);
 		sb.append(".setViewBox(0,0,");
-		sb.append(doc.getRootElement().attributeValue("width"));
+		sb.append(Math.floor(Float.parseFloat(doc.getRootElement().attributeValue("width"))) + 1);
 		sb.append(",");
-		sb.append(doc.getRootElement().attributeValue("height"));
-		sb.append(");\n");
+		sb.append(Math.floor(Float.parseFloat(doc.getRootElement().attributeValue("height"))) + 1);
+		sb.append(",true);\n");
 		for (Element element : (List<Element>) doc.getRootElement().element("g").elements("path")) {
 			sb.append(container).append(".path('");
 			sb.append(element.attributeValue("d").toString());
