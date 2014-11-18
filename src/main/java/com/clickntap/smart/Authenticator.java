@@ -31,6 +31,4 @@ public interface Authenticator {
 
 	public void deauthorize(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-	public String getFacebookAppId() throws Exception;
-
 }

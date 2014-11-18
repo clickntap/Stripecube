@@ -21,7 +21,6 @@ public class SmartAuthenticator implements Authenticator {
 	private static final String SMART_PASSWORD_PARAM = "password";
 	private static final String BEAN_LOGIN_FILTER = "login";
 	private static final String BEAN_LOGOUT_FILTER = "logout";
-	private String facebookAppId;
 	private String className;
 	private BeanManager beanManager;
 	private boolean md5;
@@ -167,14 +166,6 @@ public class SmartAuthenticator implements Authenticator {
 
 	public void deauthorize(HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().removeAttribute(SmartContext.SMART_USER_ID);
-	}
-
-	public void setFacebookAppId(String facebookAppId) {
-		this.facebookAppId = facebookAppId;
-	}
-
-	public String getFacebookAppId() {
-		return facebookAppId;
 	}
 
 }

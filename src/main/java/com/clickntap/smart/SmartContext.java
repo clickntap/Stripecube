@@ -540,14 +540,6 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 		return new SmartUserAgent(this);
 	}
 
-	public SmartFacebook getSmartFacebook() throws Exception {
-		return new SmartFacebook(this);
-	}
-
-	public String getFacebookAppId() throws Exception {
-		return authenticator.getFacebookAppId();
-	}
-
 	public void sendError(String errorMessageKey, String errorMessage) throws Exception {
 		response.addHeader(errorMessageKey, errorMessage);
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
