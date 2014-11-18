@@ -4,7 +4,7 @@
 
 	<groupId>com.clickntap</groupId>
 	<artifactId>Stripecube</artifactId>
-	<version>1.13-SNAPSHOT</version>
+	<version>1.14-SNAPSHOT</version>
 
 	<name>Stripecube</name>
 	<description>Stripecube is an open source Java framework for Web Applications</description>
@@ -130,11 +130,6 @@
 			<groupId>org.lesscss</groupId>
 			<artifactId>lesscss</artifactId>
 			<version>1.7.0.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>1.8.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
