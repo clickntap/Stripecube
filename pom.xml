@@ -4,7 +4,7 @@
 
 	<groupId>com.clickntap</groupId>
 	<artifactId>Stripecube</artifactId>
-	<version>1.16</version>
+	<version>1.17</version>
 
 	<name>Stripecube</name>
 	<description>Stripecube is an open source Java framework for Web Applications</description>
@@ -59,7 +59,7 @@
 		<connection>scm:git:ssh://github.com/clickntap/Stripecube.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/clickntap/Stripecube.git</developerConnection>
 		<url>https://github.com/clickntap/Stripecube</url>
-		<tag>Stripecube-1.16</tag>
+		<tag>Stripecube-1.17</tag>
 	</scm>
 
 	<properties>
