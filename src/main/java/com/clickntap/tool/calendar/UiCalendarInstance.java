@@ -119,11 +119,17 @@ public class UiCalendarInstance extends BO {
 
 	public void setUicalendarDateStart(SmartContext ctx, Datetime dateStart) {
 		if (dateStart != null) {
-			this.uicalendarDateStart = dateStart;
+			this.uicalendarDateStart = new Datetime(dateStart);
 			try {
 				if (dateStart.getTimeInMillis() > uicalendarDateEnd.getTimeInMillis()) {
 					// setInterval(null, dateStart, 0, 0);
-					this.uicalendarDateEnd = uicalendarDateStart;
+					
+					int h = uicalendarDateEnd.getHourOfDay();
+					int m = uicalendarDateEnd.getMinute();
+					
+					this.uicalendarDateEnd = new Datetime(uicalendarDateStart);
+					this.uicalendarDateEnd.setHourOfDay(h);
+					this.uicalendarDateEnd.setMinute(m);
 					return;
 				}
 			} catch (Exception e) {
@@ -138,11 +144,15 @@ public class UiCalendarInstance extends BO {
 
 	public void setUicalendarDateEnd(SmartContext ctx, Datetime dateEnd) {
 		if (dateEnd != null) {
-			this.uicalendarDateEnd = dateEnd;
+			this.uicalendarDateEnd = new Datetime(dateEnd);
 			try {
 				if (dateEnd.getTimeInMillis() < uicalendarDateStart.getTimeInMillis()) {
-					this.uicalendarDateEnd = uicalendarDateStart;
+					int h = uicalendarDateEnd.getHourOfDay();
+					int m = uicalendarDateEnd.getMinute();
+					this.uicalendarDateEnd = new Datetime(uicalendarDateStart);
 					// setInterval(null, dateEnd, 0, 0);
+					this.uicalendarDateEnd.setHourOfDay(h);
+					this.uicalendarDateEnd.setMinute(m);
 					return;
 				}
 			} catch (Exception e) {
@@ -156,7 +166,7 @@ public class UiCalendarInstance extends BO {
 
 	public void setUicalendarUndoStart(SmartContext ctx, Datetime dateStart) {
 		if (dateStart != null) {
-			this.uicalendarDateStart = dateStart;
+			this.uicalendarDateStart = new Datetime(dateStart);
 			try {
 				if (dateStart.getTimeInMillis() > uicalendarDateEnd.getTimeInMillis()) {
 					setInterval(null, dateStart, 0, 0);
@@ -173,7 +183,7 @@ public class UiCalendarInstance extends BO {
 
 	public void setUicalendarUndoEnd(SmartContext ctx, Datetime dateEnd) {
 		if (dateEnd != null) {
-			this.uicalendarDateEnd = dateEnd;
+			this.uicalendarDateEnd = new Datetime(dateEnd);
 			try {
 				if (dateEnd.getTimeInMillis() < uicalendarDateStart.getTimeInMillis()) {
 					setInterval(null, dateEnd, 0, 0);
