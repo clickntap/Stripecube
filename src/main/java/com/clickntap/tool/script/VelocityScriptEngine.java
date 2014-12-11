@@ -1,41 +1,41 @@
 package com.clickntap.tool.script;
 
-import java.io.OutputStream;
-import java.util.Map;
-
 import com.clickntap.tool.types.AbstractComponent;
 import com.clickntap.tool.types.NotYetImplemented;
 
+import java.io.OutputStream;
+import java.util.Map;
+
 public class VelocityScriptEngine extends AbstractComponent implements ScriptEngine {
 
-	public String eval(Map<String, Object> ctx, String templateName) throws Exception {
-		throw new NotYetImplemented();
-	}
+    public String eval(Map<String, Object> ctx, String templateName) throws Exception {
+        throw new NotYetImplemented();
+    }
 
-	public void eval(Map<String, Object> ctx, String templateName, OutputStream out) throws Exception {
-		throw new NotYetImplemented();
-	}
+    public void eval(Map<String, Object> ctx, String templateName, OutputStream out) throws Exception {
+        throw new NotYetImplemented();
+    }
 
-	public boolean evalRule(Map<String, Object> context, String templateName) throws Exception {
-		throw new NotYetImplemented();
-	}
+    public boolean evalRule(Map<String, Object> context, String templateName) throws Exception {
+        throw new NotYetImplemented();
+    }
 
-	public boolean evalRuleScript(Map<String, Object> context, String rule) throws Exception {
-		throw new NotYetImplemented();
-	}
+    public boolean evalRuleScript(Map<String, Object> context, String rule) throws Exception {
+        throw new NotYetImplemented();
+    }
 
-	public String evalScript(Map<String, Object> ctx, String script) throws Exception {
-		throw new NotYetImplemented();
-	}
+    public String evalScript(Map<String, Object> ctx, String script) throws Exception {
+        throw new NotYetImplemented();
+    }
 
-	public void evalScript(Map<String, Object> ctx, String script, OutputStream out) throws Exception {
-		throw new NotYetImplemented();
-	}
+    public void evalScript(Map<String, Object> ctx, String script, OutputStream out) throws Exception {
+        throw new NotYetImplemented();
+    }
 
-	public void start() throws Exception {
-		throw new NotYetImplemented();
-	}
-	/*
+    public void start() throws Exception {
+        throw new NotYetImplemented();
+    }
+    /*
 	 * private static final String SCRIPT_LOG_TAG = "script"; private VelocityEngine engine; private String scriptPath;
 	 * 
 	 * public String eval(Map<String, Object> ctx, String templateName) throws Exception { StringWriter writer = new StringWriter(); engine.mergeTemplate(scriptPath + templateName, new ScriptContext(ctx), writer); return writer.toString(); }
