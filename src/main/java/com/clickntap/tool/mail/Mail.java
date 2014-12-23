@@ -1,308 +1,317 @@
 package com.clickntap.tool.mail;
 
-import com.clickntap.utils.ConstUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.clickntap.utils.ConstUtils;
+
 public class Mail {
-    private static final String MIXED = "mixed";
-    private static final String RELATED = "related";
-    private static final String ALTERNATIVE = "alternative";
-    private static final String CONTENT_ID = "Content-Id";
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static Log log = LogFactory.getLog(Mail.class);
-    protected String key = ConstUtils.EMPTY;
-    protected String host = ConstUtils.EMPTY;
-    protected String port = null;
-    protected String from = null;
-    protected String username = null;
-    protected String password = null;
-    protected List<String> to = new ArrayList<String>();
-    protected List<String> cc = new ArrayList<String>();
-    protected List<String> bcc = new ArrayList<String>();
-    protected List<String> attachs = new ArrayList<String>();
-    protected List<String> resources = new ArrayList<String>();
-    protected String subject = ConstUtils.EMPTY;
-    protected List<Body> bodies = new ArrayList<Body>();
-    protected Boolean starttls;
-    public Mail() {
-        this(false);
-    }
-    public Mail(Boolean starttl) {
-        this.starttls = starttl;
-    }
+	private static final String MIXED = "mixed";
+	private static final String RELATED = "related";
+	private static final String ALTERNATIVE = "alternative";
+	private static final String CONTENT_ID = "Content-Id";
+	private static final String CONTENT_TYPE = "Content-Type";
+	private static Log log = LogFactory.getLog(Mail.class);
+	protected String key = ConstUtils.EMPTY;
+	protected String host = ConstUtils.EMPTY;
+	protected String port = null;
+	protected String from = null;
+	protected String username = null;
+	protected String password = null;
+	protected List<String> to = new ArrayList<String>();
+	protected List<String> cc = new ArrayList<String>();
+	protected List<String> bcc = new ArrayList<String>();
+	protected List<String> attachs = new ArrayList<String>();
+	protected List<String> resources = new ArrayList<String>();
+	protected String subject = ConstUtils.EMPTY;
+	protected List<Body> bodies = new ArrayList<Body>();
+	protected Boolean starttls;
 
-    public String getKey() {
-        return key;
-    }
+	public Mail() {
+		this(false);
+	}
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+	public Mail(Boolean starttl) {
+		this.starttls = starttl;
+	}
 
-    public void setHost(String host) {
-        this.host = host;
-    }
+	public String getKey() {
+		return key;
+	}
 
-    public void setPort(String port) {
-        this.port = port;
-    }
+	public void setKey(String key) {
+		this.key = key;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setHost(String host) {
+		this.host = host;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPort(String port) {
+		this.port = port;
+	}
 
-    public void setFrom(String email) {
-        this.from = email;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void addTo(String email) {
-        this.to.add(email);
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void addTos(List<String> to) {
-        this.to.addAll(to);
-    }
+	public void setFrom(String email) {
+		this.from = email;
+	}
 
-    public void resetTo() {
-        this.to = new ArrayList<String>();
-    }
+	public void addTo(String email) {
+		this.to.add(email);
+	}
 
-    public void addCc(String mail) {
-        this.cc.add(mail);
-    }
+	public void addTos(List<String> to) {
+		this.to.addAll(to);
+	}
 
-    public void addCcs(List<String> cc) {
-        this.cc.addAll(cc);
-    }
+	public void resetTo() {
+		this.to = new ArrayList<String>();
+	}
 
-    public void resetCc() {
-        this.cc = new ArrayList<String>();
-    }
+	public void addCc(String mail) {
+		this.cc.add(mail);
+	}
 
-    public void addBcc(String mail) {
-        this.bcc.add(mail);
-    }
+	public void addCcs(List<String> cc) {
+		this.cc.addAll(cc);
+	}
 
-    public void addBccs(List<String> bcc) {
-        this.bcc.addAll(bcc);
-    }
+	public void resetCc() {
+		this.cc = new ArrayList<String>();
+	}
 
-    public void resetBcc() {
-        this.bcc = new ArrayList<String>();
-    }
+	public void addBcc(String mail) {
+		this.bcc.add(mail);
+	}
 
-    public void addAttach(String file) {
-        this.attachs.add(file);
-    }
+	public void addBccs(List<String> bcc) {
+		this.bcc.addAll(bcc);
+	}
 
-    public void addAttachs(List<String> attachs) {
-        this.attachs.addAll(attachs);
-    }
+	public void resetBcc() {
+		this.bcc = new ArrayList<String>();
+	}
 
-    public void resetAttachs() {
-        this.attachs = new ArrayList<String>();
-    }
+	public void addAttach(String file) {
+		this.attachs.add(file);
+	}
 
-    public void addResource(String file) {
-        this.resources.add(file);
-    }
+	public void addAttachs(List<String> attachs) {
+		this.attachs.addAll(attachs);
+	}
 
-    public void addResources(List<String> resources) {
-        this.resources.addAll(resources);
-    }
+	public void resetAttachs() {
+		this.attachs = new ArrayList<String>();
+	}
 
-    public void resetResources() {
-        this.resources = new ArrayList<String>();
-    }
+	public void addResource(String file) {
+		this.resources.add(file);
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public void addResources(List<String> resources) {
+		this.resources.addAll(resources);
+	}
 
-    public void addBody(String content, String contentType) {
-        bodies.add(new Body(content, contentType));
-    }
+	public void resetResources() {
+		this.resources = new ArrayList<String>();
+	}
 
-    public void addBodies(List<Body> bodies) {
-        this.bodies.addAll(bodies);
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public void resetBodies() {
-        bodies = new ArrayList<Body>();
-    }
+	public void addBody(String content, String contentType) {
+		bodies.add(new Body(content, contentType));
+	}
 
-    public void send(boolean synchronous) throws Exception {
-        if (synchronous)
-            send();
-        else
-            sendAsynchronous();
-    }
+	public void addBodies(List<Body> bodies) {
+		this.bodies.addAll(bodies);
+	}
 
-    public void send() throws Exception {
-        MimeMessage msg;
-        java.util.Properties p = new java.util.Properties();
+	public void resetBodies() {
+		bodies = new ArrayList<Body>();
+	}
 
-        SmtpAuthenticator authenticator = null;
+	public void send(boolean synchronous) throws Exception {
+		if (synchronous)
+			send();
+		else
+			sendAsynchronous();
+	}
 
-        if (host.equals("localhost"))
-            p.put("mail.host", host);
-        else {
-            p.put("mail.smtp.host", host);
-            p.put("mail.smtp.localhost", host);
-        }
-        if (port != null)
-            p.put("mail.smtp.port", port);
-        if (username != null) {
-            if (starttls)
-                p.put("mail.smtp.starttls.enable", "true");
-            p.put("mail.smtp.auth", "true");
-            authenticator = new SmtpAuthenticator(username, password);
-        }
+	public void send() throws Exception {
+		MimeMessage msg;
+		java.util.Properties p = new java.util.Properties();
 
-        Session session = Session.getInstance(p, authenticator);
+		SmtpAuthenticator authenticator = null;
 
-        msg = new MimeMessage(session);
-        if (from != null)
-            msg.setFrom(new InternetAddress(from));
-        msg.setSubject(subject);
+		if (host.equals("localhost"))
+			p.put("mail.host", host);
+		else {
+			p.put("mail.smtp.host", host);
+			p.put("mail.smtp.localhost", host);
+		}
+		if (port != null)
+			p.put("mail.smtp.port", port);
+		if (username != null) {
+			if (starttls)
+				p.put("mail.smtp.starttls.enable", "true");
+			p.put("mail.smtp.auth", "true");
+			authenticator = new SmtpAuthenticator(username, password);
+		}
 
-        for (int i = 0; i < to.size(); i++)
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress((String) to.get(i)));
+		Session session = Session.getInstance(p, authenticator);
 
-        for (int i = 0; i < cc.size(); i++)
-            msg.addRecipient(Message.RecipientType.CC, new InternetAddress((String) cc.get(i)));
+		msg = new MimeMessage(session);
+		if (from != null)
+			msg.setFrom(new InternetAddress(from));
+		msg.setSubject(subject);
 
-        for (int i = 0; i < bcc.size(); i++)
-            msg.addRecipient(Message.RecipientType.BCC, new InternetAddress((String) bcc.get(i)));
-        MimeBodyPart mbp = null;
-        FileDataSource fds = null;
-        Body body = null;
-        if ((attachs.size() + resources.size() + bodies.size()) > 1) {
-            Multipart mp = null;
-            Multipart mpBodies = null;
-            Multipart mpResources = null;
+		for (int i = 0; i < to.size(); i++)
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress((String) to.get(i)));
 
-            String mpType = ConstUtils.EMPTY;
+		for (int i = 0; i < cc.size(); i++)
+			msg.addRecipient(Message.RecipientType.CC, new InternetAddress((String) cc.get(i)));
 
-            if (attachs.size() > 0)
-                mpType = MIXED;
-            else if (resources.size() > 0)
-                mpType = RELATED;
-            else if (bodies.size() > 1)
-                mpType = ALTERNATIVE;
+		for (int i = 0; i < bcc.size(); i++)
+			msg.addRecipient(Message.RecipientType.BCC, new InternetAddress((String) bcc.get(i)));
+		MimeBodyPart mbp = null;
+		FileDataSource fds = null;
+		Body body = null;
+		if ((attachs.size() + resources.size() + bodies.size()) > 1) {
+			Multipart mp = null;
+			Multipart mpBodies = null;
+			Multipart mpResources = null;
 
-            mp = new MimeMultipart(mpType);
+			String mpType = ConstUtils.EMPTY;
 
-            if (resources.size() > 0 && !mpType.equals(RELATED))
-                mpResources = new MimeMultipart(RELATED);
+			if (attachs.size() > 0)
+				mpType = MIXED;
+			else if (resources.size() > 0)
+				mpType = RELATED;
+			else if (bodies.size() > 1)
+				mpType = ALTERNATIVE;
 
-            if (bodies.size() > 1 && !mpType.equals(ALTERNATIVE))
-                mpBodies = new MimeMultipart(ALTERNATIVE);
+			mp = new MimeMultipart(mpType);
 
-            for (int i = 0; i < bodies.size(); i++) {
-                body = (Body) bodies.get(i);
-                mbp = new MimeBodyPart();
-                mbp.setContent(body.getContent(), body.getContentType());
+			if (resources.size() > 0 && !mpType.equals(RELATED))
+				mpResources = new MimeMultipart(RELATED);
 
-                if (mpBodies != null)
-                    mpBodies.addBodyPart(mbp);
-                else if (mpResources != null)
-                    mpResources.addBodyPart(mbp);
-                else
-                    mp.addBodyPart(mbp);
-            }
-            if (mpBodies != null) {
-                mbp = new MimeBodyPart();
-                mbp.setContent(mpBodies);
-                if (mpResources != null)
-                    mpResources.addBodyPart(mbp);
-                else
-                    mp.addBodyPart(mbp);
-            }
+			if (bodies.size() > 1 && !mpType.equals(ALTERNATIVE))
+				mpBodies = new MimeMultipart(ALTERNATIVE);
 
-            for (int i = 0; i < resources.size(); i++) {
+			for (int i = 0; i < bodies.size(); i++) {
+				body = (Body) bodies.get(i);
+				mbp = new MimeBodyPart();
+				mbp.setContent(body.getContent(), body.getContentType());
 
-                FileNameMap fileNameMap = URLConnection.getFileNameMap();
-                String contentType = fileNameMap.getContentTypeFor((String) resources.get(i));
-                File f = new File((String) resources.get(i));
-                fds = new FileDataSource(f);
-                mbp = new MimeBodyPart();
-                mbp.setDataHandler(new DataHandler(fds));
-                mbp.setHeader(CONTENT_ID, ConstUtils.LT + fds.getName() + ConstUtils.GT);
-                mbp.setHeader(CONTENT_TYPE, contentType);
-                if (mpResources != null)
-                    mpResources.addBodyPart(mbp);
-                else
-                    mp.addBodyPart(mbp);
-            }
-            if (mpResources != null) {
-                mbp = new MimeBodyPart();
-                mbp.setContent(mpResources);
-                mp.addBodyPart(mbp);
-            }
+				if (mpBodies != null)
+					mpBodies.addBodyPart(mbp);
+				else if (mpResources != null)
+					mpResources.addBodyPart(mbp);
+				else
+					mp.addBodyPart(mbp);
+			}
+			if (mpBodies != null) {
+				mbp = new MimeBodyPart();
+				mbp.setContent(mpBodies);
+				if (mpResources != null)
+					mpResources.addBodyPart(mbp);
+				else
+					mp.addBodyPart(mbp);
+			}
 
-            for (int i = 0; i < attachs.size(); i++) {
-                fds = new FileDataSource((String) attachs.get(i));
-                mbp = new MimeBodyPart();
-                mbp.setDataHandler(new DataHandler(fds));
-                mbp.setFileName(fds.getName());
-                mp.addBodyPart(mbp);
-            }
+			for (int i = 0; i < resources.size(); i++) {
 
-            msg.setContent(mp);
-        } else if (bodies.size() == 1) {
-            body = (Body) bodies.get(0);
-            msg.setContent(body.getContent(), body.getContentType());
-        }
-        msg.setSentDate(new java.util.Date());
-        Transport.send(msg);
-    }
+				FileNameMap fileNameMap = URLConnection.getFileNameMap();
+				String contentType = fileNameMap.getContentTypeFor((String) resources.get(i));
+				File f = new File((String) resources.get(i));
+				fds = new FileDataSource(f);
+				mbp = new MimeBodyPart();
+				mbp.setDataHandler(new DataHandler(fds));
+				mbp.setHeader(CONTENT_ID, ConstUtils.LT + fds.getName() + ConstUtils.GT);
+				mbp.setHeader(CONTENT_TYPE, contentType);
+				if (mpResources != null)
+					mpResources.addBodyPart(mbp);
+				else
+					mp.addBodyPart(mbp);
+			}
+			if (mpResources != null) {
+				mbp = new MimeBodyPart();
+				mbp.setContent(mpResources);
+				mp.addBodyPart(mbp);
+			}
 
-    public void sendAsynchronous() {
-        Thread t = new MailerThread();
-        t.setPriority(Thread.MIN_PRIORITY);
-        t.start();
-    }
+			for (int i = 0; i < attachs.size(); i++) {
+				fds = new FileDataSource((String) attachs.get(i));
+				mbp = new MimeBodyPart();
+				mbp.setDataHandler(new DataHandler(fds));
+				mbp.setFileName(fds.getName());
+				mp.addBodyPart(mbp);
+			}
 
-    public class MailerThread extends Thread {
-        public void run() {
-            try {
-                send();
-            } catch (Exception e) {
-                log.error("mail", e);
-            }
-        }
-    }
+			msg.setContent(mp);
+		} else if (bodies.size() == 1) {
+			body = (Body) bodies.get(0);
+			msg.setContent(body.getContent(), body.getContentType());
+		}
+		msg.setSentDate(new java.util.Date());
+		Transport.send(msg);
+	}
 
-    public class SmtpAuthenticator extends Authenticator {
-        protected PasswordAuthentication passwordAuthentication = null;
+	public void sendAsynchronous() {
+		Thread t = new MailerThread();
+		t.setPriority(Thread.MIN_PRIORITY);
+		t.start();
+	}
 
-        public SmtpAuthenticator(String username, String password) {
-            passwordAuthentication = new PasswordAuthentication(username, password);
-        }
+	public class MailerThread extends Thread {
+		public void run() {
+			try {
+				send();
+			} catch (Exception e) {
+				log.error("mail", e);
+			}
+		}
+	}
 
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return passwordAuthentication;
-        }
+	public class SmtpAuthenticator extends Authenticator {
+		protected PasswordAuthentication passwordAuthentication = null;
 
-    }
+		public SmtpAuthenticator(String username, String password) {
+			passwordAuthentication = new PasswordAuthentication(username, password);
+		}
+
+		protected PasswordAuthentication getPasswordAuthentication() {
+			return passwordAuthentication;
+		}
+
+	}
 
 }
