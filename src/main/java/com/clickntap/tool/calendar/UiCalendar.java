@@ -203,8 +203,8 @@ public class UiCalendar extends BO {
 	}
 
 	public void undo() throws Exception {
-		setUicalendarDateStart(getUicalendarUndoStart());
-		setUicalendarDateEnd(getUicalendarUndoEnd());
+		setUicalendarDateStart(null);
+		setUicalendarDateEnd(null);
 		update();
 	}
 

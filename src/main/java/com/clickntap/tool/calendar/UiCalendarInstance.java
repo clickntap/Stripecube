@@ -82,8 +82,12 @@ public class UiCalendarInstance extends BO {
 	}
 
 	public Datetime getUicalendarDateStart() {
-		uicalendarDateStart.setFirstDayOfWeek(Calendar.MONDAY);
-		return uicalendarDateStart;
+		try {
+			uicalendarDateStart.setFirstDayOfWeek(Calendar.MONDAY);
+			return uicalendarDateStart;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public Boolean isDayInRange(Datetime day) {
@@ -134,12 +138,18 @@ public class UiCalendarInstance extends BO {
 				}
 			} catch (Exception e) {
 			}
+		} else{
+			this.uicalendarDateStart = null;
 		}
 	}
 
 	public Datetime getUicalendarDateEnd() {
-		uicalendarDateEnd.setFirstDayOfWeek(Calendar.MONDAY);
-		return uicalendarDateEnd;
+		try {
+			uicalendarDateEnd.setFirstDayOfWeek(Calendar.MONDAY);
+			return uicalendarDateEnd;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public void setUicalendarDateEnd(SmartContext ctx, Datetime dateEnd) {
@@ -157,6 +167,8 @@ public class UiCalendarInstance extends BO {
 				}
 			} catch (Exception e) {
 			}
+		} else {
+			this.uicalendarDateEnd = null;
 		}
 	}
 
@@ -166,14 +178,14 @@ public class UiCalendarInstance extends BO {
 
 	public void setUicalendarUndoStart(SmartContext ctx, Datetime dateStart) {
 		if (dateStart != null) {
-			this.uicalendarDateStart = new Datetime(dateStart);
-			try {
+			this.uicalendarUndoStart = new Datetime(dateStart);
+			/*try {
 				if (dateStart.getTimeInMillis() > uicalendarDateEnd.getTimeInMillis()) {
 					setInterval(null, dateStart, 0, 0);
 					return;
 				}
 			} catch (Exception e) {
-			}
+			}*/
 		}
 	}
 
@@ -183,14 +195,14 @@ public class UiCalendarInstance extends BO {
 
 	public void setUicalendarUndoEnd(SmartContext ctx, Datetime dateEnd) {
 		if (dateEnd != null) {
-			this.uicalendarDateEnd = new Datetime(dateEnd);
-			try {
+			this.uicalendarUndoEnd = new Datetime(dateEnd);
+			/*try {
 				if (dateEnd.getTimeInMillis() < uicalendarDateStart.getTimeInMillis()) {
 					setInterval(null, dateEnd, 0, 0);
 					return;
 				}
 			} catch (Exception e) {
-			}
+			}*/
 		}
 	}
 
