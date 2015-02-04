@@ -127,7 +127,7 @@ function uis(params, service) {
 		clearTimeout(uiSyncTimer);
 		uiSyncTimer = setTimeout(function() {
 			uis(params, service)
-		}, 300);
+		}, 1000);
 		return;
 	}
 	if (!uiResponseBusy && uiRequestQueue.length == 0) {
