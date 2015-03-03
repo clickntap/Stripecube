@@ -209,13 +209,6 @@ public class SmartApp extends AbstractComponent {
                 executionTimes.remove(99);
             }
             executionTimes.add(0, millis);
-            if (log.isInfoEnabled()) {
-                if (executionTimes.size() < 10) {
-                    log.info("last execution times: " + executionTimes);
-                } else {
-                    log.info("last execution times: " + executionTimes.subList(0, 10));
-                }
-            }
         } catch (Exception e) {
         }
     }
