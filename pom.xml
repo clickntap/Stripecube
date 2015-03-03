@@ -5,7 +5,7 @@
     <groupId>com.clickntap</groupId>
     <artifactId>Stripecube</artifactId>
     <version>1.26-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Stripecube</name>
     <description>Stripecube is an open source Java framework for Web Applications</description>
     <url>https://github.com/clickntap/Stripecube</url>
@@ -72,10 +72,10 @@
         <!-- <additionalparam>-Xdoclint:none</additionalparam> -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-<!--
+
         <source.version>1.6</source.version>
         <target.version>1.6</target.version>
--->
+
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
