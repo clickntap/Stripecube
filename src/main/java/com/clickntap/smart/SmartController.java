@@ -21,7 +21,6 @@ public class SmartController {
 	private String errorRef;
 	private SmartController parent;
 	private List<SmartController> children;
-	private String demo;
 	private String name;
 	private String viewName;
 	private SmartAction cacheAction;
@@ -38,10 +37,6 @@ public class SmartController {
 			viewName = element.attributeValue("viewName");
 		else if (parent != null)
 			viewName = parent.getViewName();
-		if (element.attributeValue("demo") != null)
-			demo = element.attributeValue("demo");
-		else if (parent != null)
-			demo = parent.getDemo();
 		if (element.attributeValue("authenticated") != null)
 			authenticated = element.attributeValue("authenticated").equals("true");
 		else if (parent != null)
@@ -170,20 +165,6 @@ public class SmartController {
 			if (ref.equals(controller.getName()))
 				return controller;
 		return null;
-	}
-
-	public boolean isDemoLocked(SmartContext ctx) {
-		String sessionDemo;
-		try {
-			sessionDemo = ctx.getSession().getAttribute("demo").toString();
-		} catch (Exception e) {
-			sessionDemo = ConstUtils.EMPTY;
-		}
-		return !getRef().equals("demo") && getDemo() != null && !getDemo().equals(sessionDemo);
-	}
-
-	public String getDemo() {
-		return demo;
 	}
 
 	public String getName() {

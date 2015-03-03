@@ -507,10 +507,6 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 		return WebUtils.getClientData(request, key);
 	}
 
-	public boolean isDemoLocked() throws SmartControllerNotFoundException {
-		return getController().isDemoLocked(this);
-	}
-
 	public String getBrowser() {
 		String ua = request.getHeader("User-Agent");
 		if (ua != null) {
