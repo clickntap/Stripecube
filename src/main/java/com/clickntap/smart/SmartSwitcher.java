@@ -190,15 +190,7 @@ public class SmartSwitcher implements Controller {
 
 	public boolean execute(SmartContext context) throws Exception {
 		boolean executed = false;
-
 		SmartController controller = context.getController();
-
-		if (controller.isDemoLocked(context)) {
-			if (controller.isAjax())
-				throw new SmartControllerAccessDeniedException();
-			context.redirect("demo");
-			return false;
-		}
 		if (!context.canTryAutoLogin())
 			context.tryAutoLogin();
 
