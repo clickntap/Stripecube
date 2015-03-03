@@ -150,7 +150,22 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 		return smartRequest;
 	}
 
-	public HttpSession getSession() {
+	public Map getSession() {
+		Map session = null;
+		HttpSession mainSession = request.getSession();
+		String selectedSession = mainSession.getAttribute("smartSession").toString();
+		if(selectedSession == null) {
+			selectedSession = code("session");
+			mainSession.setAttribute("smartSession", selectedSession);
+		}
+		{
+			Map sessionMap = (Map) mainSession.getAttribute("smartSessionMap");
+			if(sessionMap == null) {
+				sessionMap = new HashMap();
+				mainSession.setAttribute("smartSessionMap", sessionMap);
+			}
+		}
+		
 		return session;
 	}
 
