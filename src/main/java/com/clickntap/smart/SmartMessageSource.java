@@ -35,7 +35,7 @@ public class SmartMessageSource implements MessageSource {
     }
 
     public String getMessage(String code, Object[] args, Locale locale) throws NoSuchMessageException {
-
+        locale = new Locale("en");
         if (code.contains("[")) {
             int x1 = 0;
             int x2 = 0;
