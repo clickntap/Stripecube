@@ -115,10 +115,10 @@ public class SmartApp extends AbstractComponent {
                 ctx.getRequest().setAttribute(objectName, object);
             }
         } else if ("session".equals(scope)) {
-            object = ctx.getSession().get(objectName);
+            object = ctx.getSession().getAttribute(objectName);
             if (object == null) {
                 object = Class.forName(objectClass).newInstance();
-                ctx.getSession().put(objectName, object);
+                ctx.getSession().setAttribute(objectName, object);
             }
         } else if ("global".equals(scope)) {
             if (globalObjects == null)
@@ -151,13 +151,13 @@ public class SmartApp extends AbstractComponent {
             }
         } else if ("session".equals(scope)) {
             try {
-                object = ctx.getSession().get(objectName);
+                object = ctx.getSession().getAttribute(objectName);
             } catch (Exception e) {
             }
             if (object == null) {
                 object = Class.forName(objectClass).newInstance();
                 try {
-                    ctx.getSession().put(objectName, object);
+                    ctx.getSession().setAttribute(objectName, object);
                 } catch (Exception e) {
                 }
                 isNew = true;
@@ -209,6 +209,13 @@ public class SmartApp extends AbstractComponent {
                 executionTimes.remove(99);
             }
             executionTimes.add(0, millis);
+            if (log.isInfoEnabled()) {
+                if (executionTimes.size() < 10) {
+                    log.info("last execution times: " + executionTimes);
+                } else {
+                    log.info("last execution times: " + executionTimes.subList(0, 10));
+                }
+            }
         } catch (Exception e) {
         }
     }

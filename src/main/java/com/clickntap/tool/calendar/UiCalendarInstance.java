@@ -123,10 +123,10 @@ public class UiCalendarInstance extends BO {
 			try {
 				if (dateStart.getTimeInMillis() > uicalendarDateEnd.getTimeInMillis()) {
 					// setInterval(null, dateStart, 0, 0);
-
+					
 					int h = uicalendarDateEnd.getHourOfDay();
 					int m = uicalendarDateEnd.getMinute();
-
+					
 					this.uicalendarDateEnd = new Datetime(uicalendarDateStart);
 					this.uicalendarDateEnd.setHourOfDay(h);
 					this.uicalendarDateEnd.setMinute(m);

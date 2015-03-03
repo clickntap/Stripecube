@@ -23,7 +23,6 @@ public class SmartJsonMessageSource extends SmartMessageSource {
     }
 
     public String getMessage(String code, Object[] args, Locale locale) throws NoSuchMessageException {
-        locale = new Locale("en");
         if (isJson) {
             try {
                 if (code.contains("[")) {

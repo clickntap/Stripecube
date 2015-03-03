@@ -15,7 +15,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
     }
 
     public static String code(String key) {
-        return key + Long.toHexString(System.currentTimeMillis()) + Long.toHexString((long) (Math.random() * Long.MAX_VALUE));
+        return key + Long.toHexString(System.currentTimeMillis());
     }
 
     public static String shortName(String name, int len) {
