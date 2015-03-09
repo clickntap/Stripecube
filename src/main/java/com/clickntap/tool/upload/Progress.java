@@ -4,30 +4,30 @@ import javax.servlet.http.HttpServletRequest;
 
 public class Progress {
 
-    private String multipartKey;
-    private HttpServletRequest request;
+	private String multipartKey;
+	private HttpServletRequest request;
 
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-    }
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
+	}
 
-    public String getMultipartKey() {
-        return multipartKey;
-    }
+	public String getMultipartKey() {
+		return multipartKey;
+	}
 
-    public void setMultipartKey(String multipartKey) {
-        this.multipartKey = multipartKey;
-    }
+	public void setMultipartKey(String multipartKey) {
+		this.multipartKey = multipartKey;
+	}
 
-    public ProgressCommonsListener getListener() {
-        if (hasListener()) {
-            return (ProgressCommonsListener) request.getSession().getAttribute(multipartKey);
-        }
-        return null;
-    }
+	public ProgressCommonsListener getListener() {
+		if (hasListener()) {
+			return (ProgressCommonsListener) request.getSession().getAttribute(multipartKey);
+		}
+		return null;
+	}
 
-    public boolean hasListener() {
-        return request != null && request.getSession().getAttribute(multipartKey) != null;
-    }
+	public boolean hasListener() {
+		return request != null && request.getSession().getAttribute(multipartKey) != null;
+	}
 
 }

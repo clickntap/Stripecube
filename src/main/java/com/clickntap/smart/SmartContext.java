@@ -1,10 +1,18 @@
 package com.clickntap.smart;
 
-import com.clickntap.tool.html.HTMLParser;
-import com.clickntap.tool.mail.Mail;
-import com.clickntap.tool.mail.Mailer;
-import com.clickntap.tool.types.Datetime;
-import com.clickntap.utils.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -16,12 +24,16 @@ import org.springframework.web.servlet.support.BindStatus;
 import org.springframework.web.servlet.support.RequestContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
+import com.clickntap.tool.html.HTMLParser;
+import com.clickntap.tool.mail.Mail;
+import com.clickntap.tool.mail.Mailer;
+import com.clickntap.tool.types.Datetime;
+import com.clickntap.utils.AsciiUtils;
+import com.clickntap.utils.ConstUtils;
+import com.clickntap.utils.LessUtils;
+import com.clickntap.utils.Pager;
+import com.clickntap.utils.StringUtils;
+import com.clickntap.utils.WebUtils;
 
 public class SmartContext extends HashMap<String, Object> implements Serializable {
 	public static final String SMART_USER = "smartUser";
@@ -29,10 +41,13 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	private static final String SMART_AUTHENTICATOR_BEAN = "smartAuthenticator";
 	private static final String SMART_APP_BEAN = "smartApp";
 	private static final String SMART_STORED_REQUEST = "smartStoredRequest";
+	private static final String SMART_SESSION_KEY = "smartSessionKey";
+	private static final String SMART_SESSIONS_KEY = "smartSessionsKey";
 	private static Log log = LogFactory.getLog(SmartContext.class);
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private HttpSession session;
+	private Map session;
+	private String activeSessionKey;
 	private ApplicationContext applicationContext;
 
 	private String ref;
@@ -57,7 +72,37 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 			}
 			this.request = request;
 			this.response = response;
-			this.session = request.getSession();
+			List<String> activeSessions = getActiveSessions();
+			if ("selectSmartSession".equals(param("action"))) {
+				if (activeSessions.contains(param("smartSession"))) {
+					request.getSession().setAttribute(SMART_SESSION_KEY, param("smartSession"));
+				}
+			}
+			activeSessionKey = (String) request.getSession().getAttribute(SMART_SESSION_KEY);
+			if ("removeSmartSession".equals(param("action"))) {
+				request.getSession().removeAttribute(SMART_SESSION_KEY);
+				activeSessions.remove(activeSessionKey);
+				if (activeSessions.size() > 0) {
+					activeSessionKey = activeSessions.get(activeSessions.size() - 1);
+					request.getSession().setAttribute(SMART_SESSION_KEY, activeSessionKey);
+				} else {
+					activeSessionKey = null;
+				}
+			}
+			if ("newSmartSession".equals(param("action"))) {
+				activeSessionKey = null;
+			}
+			if (activeSessionKey == null) {
+				try {
+					activeSessionKey = new Datetime().toIETFDate();
+					if (!activeSessions.contains(activeSessionKey)) {
+						activeSessions.add(activeSessionKey);
+					}
+				} catch (ParseException e) {
+				}
+				request.getSession().setAttribute(SMART_SESSION_KEY, activeSessionKey);
+			}
+			this.session = getActiveSession();
 			try {
 				this.applicationContext = RequestContextUtils.getWebApplicationContext(request);
 				this.authenticator = (Authenticator) getBean(SMART_AUTHENTICATOR_BEAN);
@@ -71,6 +116,32 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 			}
 		}
 		put(ConstUtils.THIS, this);
+	}
+
+	public List<String> getActiveSessions() {
+		List<String> activeSessions = (List<String>) request.getSession().getAttribute(SMART_SESSIONS_KEY);
+		if (activeSessions == null) {
+			activeSessions = new ArrayList<String>();
+			request.getSession().setAttribute(SMART_SESSIONS_KEY, activeSessions);
+		}
+		return activeSessions;
+	}
+
+	public String getActiveSessionKey() {
+		return activeSessionKey;
+	}
+
+	public Datetime toSessionDate(String ietfDate) throws Exception {
+		return Datetime.parseIETFDate(ietfDate);
+	}
+
+	public Map getActiveSession() {
+		Map map = (Map) request.getSession().getAttribute(activeSessionKey);
+		if (map == null) {
+			map = new HashMap();
+			request.getSession().setAttribute(activeSessionKey, map);
+		}
+		return map;
 	}
 
 	public String getVersion() {
@@ -138,26 +209,26 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 		return smartRequest;
 	}
 
-	public HttpSession getSession() {
+	public Map getSession() {
 		return session;
 	}
 
 	public void storeRequest() {
-		session.setAttribute(SMART_STORED_REQUEST, new SmartRequest(ref, request));
+		session.put(SMART_STORED_REQUEST, new SmartRequest(ref, request));
 	}
 
 	public SmartRequest getStoredRequest() {
-		return (SmartRequest) session.getAttribute(SMART_STORED_REQUEST);
+		return (SmartRequest) session.get(SMART_STORED_REQUEST);
 	}
 
 	public boolean isStoredRequest() {
-		return session.getAttribute(SMART_STORED_REQUEST) != null;
+		return session.get(SMART_STORED_REQUEST) != null;
 	}
 
 	public void loadRequest() {
 		if (isStoredRequest()) {
 			smartRequest = getStoredRequest();
-			session.removeAttribute(SMART_STORED_REQUEST);
+			session.remove(SMART_STORED_REQUEST);
 		}
 	}
 
@@ -254,7 +325,7 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	}
 
 	public Number getUserId() {
-		return (Number) session.getAttribute(SMART_USER_ID);
+		return (Number) request.getSession().getAttribute(SMART_USER_ID);
 	}
 
 	public boolean tryLogin(boolean always) throws Exception {
