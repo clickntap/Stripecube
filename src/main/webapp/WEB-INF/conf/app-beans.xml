@@ -1,0 +1,14 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/conf/auto/jdbc.properties</value>
+				<value>/WEB-INF/conf/auto/smart-app.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="app" class="com.clickntap.hub.App" init-method="init">
+		<property name="beanManager" ref="beanManager" />
+	</bean>
+	<import resource="classpath:app-orm-inc.xml" />
+</beans>

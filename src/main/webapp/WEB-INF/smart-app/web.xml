@@ -1,0 +1,8 @@
+<smart-controller>
+	<action>
+		<bind name="ui" class="com.clickntap.hub.AppSession" scope="session" channel="app" />
+		<exec>
+			${ui.setCtx(this)}
+		</exec>
+	</action>
+</smart-controller>

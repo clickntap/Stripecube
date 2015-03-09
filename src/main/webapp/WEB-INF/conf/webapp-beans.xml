@@ -1,0 +1,16 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <import resource="app-beans.xml"/>
+    <import resource="classpath:webapp-beans-inc.xml"/>
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" id="urlMapping">
+        <property name="mappings">
+            <props>
+                <prop key="**/*.app">smartSwitcher</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="smartSwitcher" class="com.clickntap.smart.SmartSwitcher">
+    </bean>
+    <bean id="multipartResolver" class="com.clickntap.tool.upload.ProgressCommonsMultipartResolver"/>
+</beans>

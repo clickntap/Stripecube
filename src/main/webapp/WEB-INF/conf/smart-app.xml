@@ -1,0 +1,4 @@
+<smart-app authenticated="false" loginRef="web" viewName="html" errorRef="error">
+    <app name="web"/>
+    <app name="web-support" errorRef="error-support"/>
+</smart-app>
