@@ -133,7 +133,7 @@ public class BeanManagerImpl implements BeanManager {
 		List<Bean> resultList = jdbcManager.queryScript(beanInfo.getReadScript(filterName), filter, beanClass);
 		bean = resultList.size() == 1 ? resultList.get(0) : null;
 		if (bean != null)
-			bean.setup();
+			bean.setupAfterRead();
 		return bean;
 	}
 
@@ -169,6 +169,7 @@ public class BeanManagerImpl implements BeanManager {
 	 * bean.Bean)
 	 */
 	public int update(Bean bean) throws Exception {
+		bean.setupBeforeUpdate();
 		Class beanClass = bean.getClass();
 		BeanInfo beanInfo = getBeanInfo(beanClass);
 

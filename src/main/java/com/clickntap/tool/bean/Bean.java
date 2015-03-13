@@ -51,10 +51,14 @@ public class Bean extends BeanId {
 		clear();
 		if (source != null)
 			BeanUtils.copyProperties(source, this);
-		setup();
+		setupAfterRead();
 	}
 
-	public void setup() throws Exception {
+	public void setupAfterRead() throws Exception {
+
+	}
+
+	public void setupBeforeUpdate() throws Exception {
 
 	}
 
