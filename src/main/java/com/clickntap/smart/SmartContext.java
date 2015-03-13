@@ -145,7 +145,7 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	}
 
 	public String getVersion() {
-		return "1.32";
+		return "1.33";
 	}
 
 	public JSONArray toJsonArray(String array) {
