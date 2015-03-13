@@ -132,6 +132,8 @@ public class BeanManagerImpl implements BeanManager {
 		BeanInfo beanInfo = getBeanInfo(beanClass);
 		List<Bean> resultList = jdbcManager.queryScript(beanInfo.getReadScript(filterName), filter, beanClass);
 		bean = resultList.size() == 1 ? resultList.get(0) : null;
+		if (bean != null)
+			bean.setup();
 		return bean;
 	}
 

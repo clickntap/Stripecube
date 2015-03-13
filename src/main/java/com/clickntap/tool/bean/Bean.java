@@ -51,6 +51,11 @@ public class Bean extends BeanId {
 		clear();
 		if (source != null)
 			BeanUtils.copyProperties(source, this);
+		setup();
+	}
+
+	public void setup() throws Exception {
+
 	}
 
 	synchronized public void read(String filter) throws Exception {
