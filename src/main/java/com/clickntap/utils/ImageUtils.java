@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,6 +25,7 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+import javax.xml.bind.DatatypeConverter;
 
 public class ImageUtils {
 
@@ -54,6 +56,16 @@ public class ImageUtils {
 			}
 		}
 		return bimg;
+	}
+
+	public static BufferedImage base64ToImage(String base64) throws Exception {
+		BufferedImage image = null;
+		base64 = base64.substring(base64.indexOf(",") + 1);
+		byte[] data = DatatypeConverter.parseBase64Binary(base64);
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		image = ImageIO.read(in);
+		in.close();
+		return image;
 	}
 
 	public static boolean hasAlpha(Image image) throws Exception {
