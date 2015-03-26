@@ -27,12 +27,23 @@ import freemarker.template.Version;
 public class FreemarkerScriptEngine implements ScriptEngine {
 
 	private static final String EXTENSION_DOTFTL = ".ftl";
-
-	;
 	private Configuration ftl;
 	private Resource templateDir;
 	private String classLoader;
 	private String extension;
+	private int updateDelay;
+
+	public FreemarkerScriptEngine() {
+		updateDelay = 1;
+	}
+
+	public int getUpdateDelay() {
+		return updateDelay;
+	}
+
+	public void setUpdateDelay(int updateDelay) {
+		this.updateDelay = updateDelay;
+	}
 
 	public String getExtension() {
 		return extension;
@@ -45,6 +56,7 @@ public class FreemarkerScriptEngine implements ScriptEngine {
 	public void start() throws Exception {
 		Version version = Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS;
 		ftl = new Configuration(version);
+		ftl.setTemplateUpdateDelay(getUpdateDelay());
 		ftl.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX);
 		ftl.setDefaultEncoding(ConstUtils.UTF_8);
 		ftl.setObjectWrapper(new BeansWrapper(version));

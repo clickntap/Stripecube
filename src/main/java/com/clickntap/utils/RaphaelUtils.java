@@ -32,7 +32,7 @@ public class RaphaelUtils {
 		sb.append("var ").append(container);
 		sb.append(" = Raphael('");
 		sb.append(container);
-		sb.append("',100%,100%);\n");
+		sb.append("','100%','100%');\n");
 		sb.append(container);
 		sb.append(".setViewBox(0,0,");
 		sb.append(Math.floor(Float.parseFloat(doc.getRootElement().attributeValue("width"))) + 1);
