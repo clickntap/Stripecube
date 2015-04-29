@@ -304,7 +304,12 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	}
 
 	public String param(String key) {
-		String value = StringUtils.toString(request.getParameter(key));
+		String value;
+		try {
+			value = StringUtils.toString(request.getParameter(key));
+		} catch (Throwable e) {
+			value = ConstUtils.EMPTY;
+		}
 		return value;
 	}
 
