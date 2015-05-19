@@ -233,44 +233,48 @@ public class SmartSwitcher implements Controller {
 	}
 
 	private void executeController(SmartContext context, SmartController controller) throws Exception {
-		if (log.isDebugEnabled()) {
-			log.debug("[ service");
-		}
-		long lo = System.currentTimeMillis();
-		SmartAction cacheAction = controller.getCacheAction();
-		if (cacheAction != null) {
-			executeAction(context, cacheAction, false);
-			if (SmartCache.isCached(context))
-				return;
-		}
-		for (SmartAction action : controller.getActions()) {
-			executeAction(context, action, false);
-		}
-		for (SmartMethod method : controller.getMethods()) {
+		try {
 			if (log.isDebugEnabled()) {
-				log.debug("[ method " + method.getName());
+				log.debug("[ service");
 			}
-			executeScripts(context, method.getInits());
-			if (method.getName().equals(context.eval(context.conf(ACTION_SCRIPT_KEY)))) {
-				executeAction(context, method, isReset(context));
-			} else if (method.getName().equals(context.eval(context.conf(FORM_SCRIPT_KEY)))) {
-				executeLoads(context, method);
-				boolean canContinue = true;
-				if (canContinue)
-					canContinue = executeRules(context, method, canContinue);
-				if (canContinue || (method.getElses().size() > 0))
-					executeBinds(context, method, true, false, isReset(context));
+			long lo = System.currentTimeMillis();
+			SmartAction cacheAction = controller.getCacheAction();
+			if (cacheAction != null) {
+				executeAction(context, cacheAction, false);
+				if (SmartCache.isCached(context))
+					return;
 			}
+			for (SmartAction action : controller.getActions()) {
+				executeAction(context, action, false);
+			}
+			for (SmartMethod method : controller.getMethods()) {
+				if (log.isDebugEnabled()) {
+					log.debug("[ method " + method.getName());
+				}
+				executeScripts(context, method.getInits());
+				if (method.getName().equals(context.eval(context.conf(ACTION_SCRIPT_KEY)))) {
+					executeAction(context, method, isReset(context));
+				} else if (method.getName().equals(context.eval(context.conf(FORM_SCRIPT_KEY)))) {
+					executeLoads(context, method);
+					boolean canContinue = true;
+					if (canContinue)
+						canContinue = executeRules(context, method, canContinue);
+					if (canContinue || (method.getElses().size() > 0))
+						executeBinds(context, method, true, false, isReset(context));
+				}
+				if (log.isDebugEnabled()) {
+					log.debug("method ]");
+				}
+			}
+			lo = (System.currentTimeMillis() - lo);
+			context.getSmartApp().addExecutionTimes(lo);
 			if (log.isDebugEnabled()) {
-				log.debug("method ]");
+				log.debug("exec in " + lo + " millis");
+				log.debug("service ]");
 			}
-		}
-		lo = (System.currentTimeMillis() - lo);
-		context.getSmartApp().addExecutionTimes(lo);
-		context.getSmartApp().addDebug(context.getDebug());
-		if (log.isDebugEnabled()) {
-			log.debug("exec in " + lo + " millis");
-			log.debug("service ]");
+		} catch (Exception e) {
+			context.getSmartApp().addDebug(context.getDebug());
+			throw e;
 		}
 	}
 

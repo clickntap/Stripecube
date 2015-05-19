@@ -57,8 +57,9 @@ public class SmartView implements View {
 				response.setHeader(PRAGMA, NO_CACHE);
 				response.setContentType(getContentType());
 				response.setCharacterEncoding(ConstUtils.UTF_8);
-				if (ctx.getException() != null)
+				if (ctx.getException() != null) {
 					throw ctx.getException();
+				}
 				viewEngine.eval(ctx, ctx.getRef(), out);
 				break;
 			case BINARY:
@@ -87,6 +88,7 @@ public class SmartView implements View {
 				break;
 			}
 		} catch (Exception e) {
+			ctx.getDebug().addScriptException("view error", e);
 			if (log.isErrorEnabled()) {
 				ctx.getSmartApp().addError(e);
 				log.error("template error", e);
