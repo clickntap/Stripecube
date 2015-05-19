@@ -273,8 +273,9 @@ public class SmartSwitcher implements Controller {
 				log.debug("service ]");
 			}
 		} catch (Exception e) {
-			context.getSmartApp().addDebug(context.getDebug());
 			throw e;
+		} finally {
+			context.getSmartApp().addDebug(context.getDebug());
 		}
 	}
 
