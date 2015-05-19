@@ -90,10 +90,22 @@ public class SmartSwitcher implements Controller {
 		if (context.isBreak())
 			return;
 		for (String script : scripts) {
+			try {
+				context.getDebug().log("executing script:\n" + script);
+			} catch (Exception ignored) {
+			}
 			if (log.isDebugEnabled()) {
 				log.debug("eval script '" + script + "'");
 			}
-			context.eval(script);
+			try {
+				context.eval(script);
+			} catch (Exception e) {
+				try {
+					context.getDebug().addScriptException(script, e);
+				} catch (Exception ignored) {
+				}
+				throw e;
+			}
 		}
 	}
 
@@ -231,8 +243,9 @@ public class SmartSwitcher implements Controller {
 			if (SmartCache.isCached(context))
 				return;
 		}
-		for (SmartAction action : controller.getActions())
+		for (SmartAction action : controller.getActions()) {
 			executeAction(context, action, false);
+		}
 		for (SmartMethod method : controller.getMethods()) {
 			if (log.isDebugEnabled()) {
 				log.debug("[ method " + method.getName());
@@ -254,6 +267,7 @@ public class SmartSwitcher implements Controller {
 		}
 		lo = (System.currentTimeMillis() - lo);
 		context.getSmartApp().addExecutionTimes(lo);
+		context.getSmartApp().addDebug(context.getDebug());
 		if (log.isDebugEnabled()) {
 			log.debug("exec in " + lo + " millis");
 			log.debug("service ]");

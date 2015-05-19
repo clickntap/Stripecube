@@ -15,6 +15,7 @@ import org.springframework.beans.MutablePropertyValues;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
+import com.clickntap.developers.debug.DebugRequest;
 import com.clickntap.tool.bean.Bean;
 import com.clickntap.tool.bean.BeanManager;
 import com.clickntap.tool.script.ScriptEngine;
@@ -34,6 +35,7 @@ public class SmartApp extends AbstractComponent {
 	private Resource docRoot;
 	private List<Long> executionTimes;
 	private List<String> lastErrors;
+	private List<DebugRequest> lastDebugs;
 
 	public static SmartBindingResult bind(SmartContext ctx, Object object, String objectName, String[] allowedFields, String[] disallowedFields) {
 		if (ctx.getSmartRequest() != null)
@@ -80,6 +82,7 @@ public class SmartApp extends AbstractComponent {
 	public void start() throws Exception {
 		executionTimes = new ArrayList<Long>();
 		lastErrors = new ArrayList<String>();
+		lastDebugs = new ArrayList<DebugRequest>();
 		Element root = XMLUtils.copyFrom(getConfResource().getInputStream()).getRootElement();
 		Element mapping = root.element("mapping");
 		if (mapping != null)
@@ -209,6 +212,16 @@ public class SmartApp extends AbstractComponent {
 		}
 	}
 
+	public void addDebug(DebugRequest debugRequest) {
+		try {
+			if (lastDebugs.size() > 9) {
+				lastDebugs.remove(9);
+			}
+			lastDebugs.add(0, debugRequest);
+		} catch (Exception e) {
+		}
+	}
+
 	public void addExecutionTimes(long millis) {
 		try {
 			if (executionTimes.size() > 99) {
@@ -225,6 +238,10 @@ public class SmartApp extends AbstractComponent {
 
 	public List<String> getLastErrors() {
 		return lastErrors;
+	}
+
+	public List<DebugRequest> getLastDebugs() {
+		return lastDebugs;
 	}
 
 	public void clearErrors() {

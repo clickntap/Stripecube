@@ -3,6 +3,7 @@ package com.clickntap.api;
 import java.util.List;
 
 import com.caucho.hessian.client.HessianProxyFactory;
+import com.clickntap.developers.debug.DebugRequest;
 
 public class RemoteConsole implements ConsoleInterface {
 
@@ -30,6 +31,10 @@ public class RemoteConsole implements ConsoleInterface {
 
 	public String getVersion() throws Exception {
 		return console.getVersion();
+	}
+
+	public List<DebugRequest> lastDebugs() throws Exception {
+		return console.lastDebugs();
 	}
 
 }

@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.BindStatus;
 import org.springframework.web.servlet.support.RequestContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.clickntap.developers.debug.DebugRequest;
 import com.clickntap.tool.html.HTMLParser;
 import com.clickntap.tool.mail.Mail;
 import com.clickntap.tool.mail.Mailer;
@@ -60,6 +61,7 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 	private RequestContext requestContext;
 	private SmartRequest smartRequest;
 	private Exception exception;
+	private DebugRequest debugRequest;
 
 	public SmartContext(HttpServletRequest request, HttpServletResponse response) {
 		if (request != null) {
@@ -116,6 +118,11 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 			}
 		}
 		put(ConstUtils.THIS, this);
+		debugRequest = new DebugRequest();
+	}
+
+	public DebugRequest getDebug() {
+		return debugRequest;
 	}
 
 	public List<String> getActiveSessions() {

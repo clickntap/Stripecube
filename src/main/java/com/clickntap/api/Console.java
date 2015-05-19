@@ -2,6 +2,7 @@ package com.clickntap.api;
 
 import java.util.List;
 
+import com.clickntap.developers.debug.DebugRequest;
 import com.clickntap.smart.SmartApp;
 import com.clickntap.tool.cache.CacheManager;
 
@@ -49,6 +50,10 @@ public class Console implements ConsoleInterface {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public List<DebugRequest> lastDebugs() throws Exception {
+		return smartApp.getLastDebugs();
 	}
 
 }
