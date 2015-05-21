@@ -1,5 +1,8 @@
 package com.clickntap.tool.cache;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class EhCacheManager implements CacheManager {
 	private net.sf.ehcache.CacheManager cacheManager;
 
@@ -21,5 +24,9 @@ public class EhCacheManager implements CacheManager {
 
 	public void shutdown() {
 		cacheManager.shutdown();
+	}
+
+	public List<String> getCacheNames() throws Exception {
+		return Arrays.asList(cacheManager.getCacheNames());
 	}
 }

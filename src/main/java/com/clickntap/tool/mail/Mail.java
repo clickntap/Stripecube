@@ -170,7 +170,7 @@ public class Mail {
 		java.util.Properties p = new java.util.Properties();
 
 		SmtpAuthenticator authenticator = null;
-
+		
 		if (host.equals("localhost"))
 			p.put("mail.host", host);
 		else {

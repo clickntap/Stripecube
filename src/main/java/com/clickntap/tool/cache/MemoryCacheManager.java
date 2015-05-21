@@ -1,6 +1,8 @@
 package com.clickntap.tool.cache;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MemoryCacheManager implements CacheManager {
 
@@ -25,6 +27,14 @@ public class MemoryCacheManager implements CacheManager {
 	public void reset() {
 		synchronized (caches) {
 			caches = new HashMap<String, MemoryCache>();
+		}
+	}
+
+	public List<String> getCacheNames() throws Exception {
+		synchronized (caches) {
+			List<String> names = new ArrayList<String>();
+			names.addAll(caches.keySet());
+			return names;
 		}
 	}
 

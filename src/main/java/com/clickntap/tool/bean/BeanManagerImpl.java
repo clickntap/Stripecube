@@ -33,6 +33,19 @@ public class BeanManagerImpl implements BeanManager {
 	private Map<Class, BeanInfo> beanInfoMap;
 	private ScriptEngine scriptEngine;
 	private String channel;
+	private Boolean cacheEnabled;
+
+	public Boolean isCacheEnabled() {
+		return cacheEnabled;
+	}
+
+	public Boolean getCacheEnabled() {
+		return cacheEnabled;
+	}
+
+	public void setCacheEnabled(Boolean cacheEnabled) {
+		this.cacheEnabled = cacheEnabled;
+	}
 
 	public BeanManagerImpl() throws Exception {
 		start();
@@ -91,7 +104,7 @@ public class BeanManagerImpl implements BeanManager {
 		Bean bean = null;
 		Cache cache = null;
 		Serializable key = null;
-		if (beanInfo.isCacheEnabled() && filterName.equals(ID_FILTER)) {
+		if (isCacheEnabled() && beanInfo.isCacheEnabled() && filterName.equals(ID_FILTER)) {
 			cache = cacheManager.getCache(beanInfo.getCacheName());
 			Number id = ((BeanId) filter).getId();
 			if (id != null) {
@@ -213,6 +226,7 @@ public class BeanManagerImpl implements BeanManager {
 
 	public void start() throws Exception {
 		beanInfoMap = new HashMap<Class, BeanInfo>();
+		cacheEnabled = true;
 	}
 
 	public void stop() throws Exception {
