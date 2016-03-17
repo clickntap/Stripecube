@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.clickntap.tool.types.Datetime;
 import com.clickntap.utils.BindUtils;
+import com.clickntap.utils.ConstUtils;
 import com.clickntap.utils.IOUtils;
 
 @SuppressWarnings("unchecked")
@@ -34,11 +35,9 @@ public class JdbcBeanRowMapper implements RowMapper {
 					Clob clob = (Clob) o;
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					IOUtils.copy(clob.getAsciiStream(), out);
-					o = new String(out.toByteArray(), "UTF-8");
+					o = new String(out.toByteArray(), ConstUtils.UTF_8);
 				}
-				// if (o instanceof String)
-				// o = AsciiUtils.utf7ToText(o.toString());
-				pvs.addPropertyValue(rs.getMetaData().getColumnLabel(i), o);
+				pvs.addPropertyValue(rs.getMetaData().getColumnLabel(i).trim(), o);
 			}
 			BindUtils.bind(bean, pvs);
 		} catch (Exception e) {

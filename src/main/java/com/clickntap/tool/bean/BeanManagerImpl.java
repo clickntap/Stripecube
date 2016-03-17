@@ -119,8 +119,6 @@ public class BeanManagerImpl implements BeanManager {
 			}
 		}
 		if (bean != null) {
-			if (!bean.getClass().equals(beanClass))
-				throw new Exception(bean.getClass().toString());
 			((Bean) bean).setBeanManager(this);
 			return bean;
 		}
