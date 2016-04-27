@@ -29,16 +29,16 @@ public class SmartConfServlet implements Servlet {
 			Properties envProperties = new Properties();
 			String envFile = conf.getInitParameter("smartEnv");
 			if (envFile != null) {
-				if (root.getAbsolutePath().contains("stg.")) {
+				if (root.getAbsolutePath().contains("-stg-")) {
 					envFile = envFile.replace("-env", "-stg-env");
 				}
-				if (root.getAbsolutePath().contains("pre.")) {
+				if (root.getAbsolutePath().contains("-pre-")) {
 					envFile = envFile.replace("-env", "-pre-env");
 				}
-				if (root.getAbsolutePath().contains("demo.")) {
+				if (root.getAbsolutePath().contains("-demo-")) {
 					envFile = envFile.replace("-env", "-demo-env");
 				}
-				if (root.getAbsolutePath().contains("dev.")) {
+				if (root.getAbsolutePath().contains("-dev-")) {
 					envFile = envFile.replace("-env", "-dev-env");
 				}
 				File file = new File(envFile);
