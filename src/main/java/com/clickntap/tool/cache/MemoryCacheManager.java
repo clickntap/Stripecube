@@ -12,7 +12,7 @@ public class MemoryCacheManager implements CacheManager {
 		caches = new HashMap<String, MemoryCache>();
 	}
 
-	public Cache getCache(String cacheName) throws Exception {
+	public Cache getCache(String cacheName, int maxSize) throws Exception {
 		synchronized (caches) {
 			if (!caches.containsKey(cacheName))
 				caches.put(cacheName, new MemoryCache());

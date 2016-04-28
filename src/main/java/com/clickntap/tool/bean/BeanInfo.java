@@ -16,6 +16,8 @@ public class BeanInfo {
 
 	private String cacheName;
 
+	private int cacheMaxSize;
+
 	private String createScript;
 
 	private String currValScript;
@@ -39,6 +41,11 @@ public class BeanInfo {
 			this.beanName = beanName;
 			Element root = document.getRootElement();
 			cacheName = root.attributeValue("cache");
+			try {
+				cacheMaxSize = Integer.parseInt(root.attributeValue("cache-max-size"));
+			} catch (Exception e) {
+				cacheMaxSize = Integer.MAX_VALUE;
+			}
 			createScript = getText(root, "create");
 			currValScript = getText(root, "curr-val");
 			updateScript = getText(root, "update");
@@ -199,6 +206,10 @@ public class BeanInfo {
 				return validationScriptList;
 			}
 		}
+	}
+
+	public int getCacheMaxSize() {
+		return cacheMaxSize;
 	}
 
 }

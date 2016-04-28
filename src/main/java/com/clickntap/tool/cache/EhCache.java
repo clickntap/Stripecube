@@ -10,12 +10,14 @@ import com.clickntap.tool.types.Datetime;
 public class EhCache implements Cache {
 	private net.sf.ehcache.Cache cache;
 
-	public EhCache(net.sf.ehcache.CacheManager cacheManager, String cacheName) throws Exception {
-		cache = cacheManager.getCache(cacheName);
-		if (cache == null) {
-			cache = new net.sf.ehcache.Cache(cacheName, 9999999, false, false, 5 * Datetime.ONEHOURINSECONDS, 2 * Datetime.ONEHOURINSECONDS);
-			cacheManager.addCache(cache);
+	public EhCache(net.sf.ehcache.CacheManager cacheManager, String cacheName, int maxSize) throws Exception {
+		synchronized (cacheName) {
 			cache = cacheManager.getCache(cacheName);
+			if (cache == null) {
+				cache = new net.sf.ehcache.Cache(cacheName, maxSize, false, false, 5 * Datetime.ONEHOURINSECONDS, 2 * Datetime.ONEHOURINSECONDS);
+				cacheManager.addCache(cache);
+				cache = cacheManager.getCache(cacheName);
+			}
 		}
 	}
 

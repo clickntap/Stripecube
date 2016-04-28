@@ -89,7 +89,7 @@ public class SmartCache {
 	}
 
 	public void setCacheManager(CacheManager cacheManager) throws Exception {
-		this.cache = cacheManager.getCache("smartCache");
+		this.cache = cacheManager.getCache("smartCache", Integer.MAX_VALUE);
 	}
 
 	private SmartCacheItem get(String ukey) throws Exception {

@@ -105,7 +105,7 @@ public class BeanManagerImpl implements BeanManager {
 		Cache cache = null;
 		Serializable key = null;
 		if (isCacheEnabled() && beanInfo.isCacheEnabled() && filterName.equals(ID_FILTER)) {
-			cache = cacheManager.getCache(beanInfo.getCacheName());
+			cache = cacheManager.getCache(beanInfo.getCacheName(), beanInfo.getCacheMaxSize());
 			Number id = ((BeanId) filter).getId();
 			if (id != null) {
 				key = makeKey(beanInfo, id);
@@ -171,7 +171,7 @@ public class BeanManagerImpl implements BeanManager {
 
 	public void invalidateCache(BeanInfo beanInfo, Number id) throws Exception {
 		if (beanInfo.isCacheEnabled())
-			cacheManager.getCache(beanInfo.getCacheName()).remove(makeKey(beanInfo, id));
+			cacheManager.getCache(beanInfo.getCacheName(), beanInfo.getCacheMaxSize()).remove(makeKey(beanInfo, id));
 	}
 
 	/*

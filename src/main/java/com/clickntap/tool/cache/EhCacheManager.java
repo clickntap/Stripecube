@@ -10,8 +10,8 @@ public class EhCacheManager implements CacheManager {
 		cacheManager = net.sf.ehcache.CacheManager.create();
 	}
 
-	public Cache getCache(String cacheName) throws Exception {
-		return new EhCache(cacheManager, cacheName);
+	public Cache getCache(String cacheName, int maxSize) throws Exception {
+		return new EhCache(cacheManager, cacheName, maxSize);
 	}
 
 	public boolean containsCache(String cacheName) {
