@@ -15,7 +15,7 @@ import com.clickntap.utils.ConstUtils;
 import com.clickntap.utils.SecurityUtils;
 
 public class BeanErrors {
-	private final static String mailRegex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	public final static String mailRegex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	private Errors errors;
 
@@ -167,8 +167,12 @@ public class BeanErrors {
 
 	public void assertEmail(String propertyName) throws Exception {
 		Object value = BeanUtils.getValue(target, propertyName);
-		if (value == null || !value.toString().matches(mailRegex))
+		if (value == null || !isEmail(value))
 			errors.rejectValue(propertyName, "bad");
+	}
+
+	public static boolean isEmail(Object value) {
+		return value.toString().matches(mailRegex);
 	}
 
 	public void assertPhoneNumber(String propertyName, int maxLen) throws Exception {
