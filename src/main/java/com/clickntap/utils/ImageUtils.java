@@ -6,7 +6,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
@@ -26,6 +28,13 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.xml.bind.DatatypeConverter;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.jpeg.JpegDirectory;
 
 public class ImageUtils {
 
@@ -269,7 +278,9 @@ public class ImageUtils {
 
 	public static void saveAs(BufferedImage bufferedImage, File file) throws IOException {
 		String format = file.getName().substring(file.getName().lastIndexOf('.') + 1);
-		saveAs(bufferedImage, format, new FileOutputStream(file));
+		OutputStream out = new FileOutputStream(file);
+		saveAs(bufferedImage, format, out);
+		out.close();
 	}
 
 	public static void saveAs(BufferedImage bufferedImage, String fileName) throws IOException {
@@ -278,7 +289,6 @@ public class ImageUtils {
 
 	public static void saveAs(BufferedImage bufferedImage, String format, OutputStream out) throws IOException {
 		ImageIO.write(bufferedImage, format, out);
-		out.close();
 	}
 
 	public static BufferedImage open(String filename) throws IOException {
@@ -289,7 +299,10 @@ public class ImageUtils {
 	}
 
 	public static BufferedImage open(File file) throws IOException {
-		return ImageIO.read(new FileInputStream(file));
+		InputStream in = new FileInputStream(file);
+		BufferedImage image = ImageIO.read(in);
+		in.close();
+		return image;
 	}
 
 	public static BufferedImage open(InputStream in) throws IOException {
@@ -380,5 +393,106 @@ public class ImageUtils {
 		for (int i = 0; i < rows.size(); i++)
 			graphics2D.drawString(rows.get(i), x, (i * rowh) + y + fm.getAscent());
 		return image;
+	}
+
+	public static void fixRotation(File file, String format) throws Exception {
+		try {
+			ImageInformation info = readImageInformation(file);
+			if (info.orientation != 1) {
+				boolean isRotate = false;
+				AffineTransform t = new AffineTransform();
+				switch (info.orientation) {
+				case 1:
+					break;
+				case 2: // Flip X
+					t.scale(-1.0, 1.0);
+					t.translate(-info.width, 0);
+					break;
+				case 3: // PI rotation 
+					t.translate(info.width, info.height);
+					t.rotate(Math.PI);
+					break;
+				case 4: // Flip Y
+					t.scale(1.0, -1.0);
+					t.translate(0, -info.height);
+					break;
+				case 5: // - PI/2 and Flip X
+					t.rotate(-Math.PI / 2);
+					t.scale(-1.0, 1.0);
+					isRotate = true;
+					break;
+				case 6: // -PI/2 and -width
+					t.translate(info.height, 0);
+					t.rotate(Math.PI / 2);
+					isRotate = true;
+					break;
+				case 7: // PI/2 and Flip
+					t.scale(-1.0, 1.0);
+					t.translate(-info.height, 0);
+					t.translate(0, info.width);
+					t.rotate(3 * Math.PI / 2);
+					isRotate = true;
+					break;
+				case 8: // PI / 2
+					t.translate(0, info.width);
+					t.rotate(3 * Math.PI / 2);
+					isRotate = true;
+					break;
+				}
+				BufferedImage image = transformImage(ImageUtils.open(file), t, isRotate);
+				FileOutputStream out = new FileOutputStream(file);
+				ImageIO.write(image, format, out);
+				out.close();
+			}
+		} catch (Exception e) {
+		}
+	}
+
+	public static class ImageInformation {
+		public final int orientation;
+		public final int width;
+		public final int height;
+
+		public ImageInformation(int orientation, int width, int height) {
+			this.orientation = orientation;
+			this.width = width;
+			this.height = height;
+		}
+
+		public String toString() {
+			return String.format("%dx%d,%d", this.width, this.height, this.orientation);
+		}
+	}
+
+	public static ImageInformation readImageInformation(File imageFile) throws Exception {
+		Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+		Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+		JpegDirectory jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
+		int orientation = 1;
+		try {
+			orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+		} catch (MetadataException me) {
+		}
+		int width = jpegDirectory.getImageWidth();
+		int height = jpegDirectory.getImageHeight();
+		return new ImageInformation(orientation, width, height);
+	}
+
+	public static BufferedImage transformImage(BufferedImage image, AffineTransform transform, boolean isRotate) throws Exception {
+		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
+		BufferedImage destinationImage = null;
+		if (isRotate) {
+			destinationImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+		} else {
+			destinationImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+		}
+		Graphics2D g = destinationImage.createGraphics();
+		g.clearRect(0, 0, destinationImage.getWidth(), destinationImage.getHeight());
+		destinationImage = op.filter(image, destinationImage);
+		return destinationImage;
+	}
+
+	public static void main(String args[]) throws Exception {
+		ImageUtils.fixRotation(new File("/Users/tmendici/Desktop/a.jpg"), "jpg");
 	}
 }
