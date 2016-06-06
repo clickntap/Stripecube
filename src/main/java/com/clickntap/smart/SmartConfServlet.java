@@ -19,6 +19,33 @@ import com.clickntap.utils.ConstUtils;
 
 public class SmartConfServlet implements Servlet {
 
+	public static boolean checkEnvPath(String path, String env) {
+		try {
+			int x = path.indexOf(env);
+			if (!Character.isLetterOrDigit(path.charAt(x - 1)) && !Character.isLetterOrDigit(path.charAt(x + env.length()))) {
+				return true;
+			}
+		} catch (Exception e) {
+		}
+		return false;
+	}
+
+	private static String checkEnvsPath(String envFile, String path) {
+		if (checkEnvPath(path, "stg")) {
+			envFile = envFile.replace("-env", "-stg-env");
+		}
+		if (checkEnvPath(path, "pre")) {
+			envFile = envFile.replace("-env", "-pre-env");
+		}
+		if (checkEnvPath(path, "demo")) {
+			envFile = envFile.replace("-env", "-demo-env");
+		}
+		if (checkEnvPath(path, "dev")) {
+			envFile = envFile.replace("-env", "-dev-env");
+		}
+		return envFile;
+	}
+
 	public void init(ServletConfig conf) throws ServletException {
 		try {
 			File root = new File(conf.getServletContext().getRealPath(""));
@@ -29,18 +56,7 @@ public class SmartConfServlet implements Servlet {
 			Properties envProperties = new Properties();
 			String envFile = conf.getInitParameter("smartEnv");
 			if (envFile != null) {
-				if (root.getAbsolutePath().contains("-stg-")) {
-					envFile = envFile.replace("-env", "-stg-env");
-				}
-				if (root.getAbsolutePath().contains("-pre-")) {
-					envFile = envFile.replace("-env", "-pre-env");
-				}
-				if (root.getAbsolutePath().contains("-demo-")) {
-					envFile = envFile.replace("-env", "-demo-env");
-				}
-				if (root.getAbsolutePath().contains("-dev-")) {
-					envFile = envFile.replace("-env", "-dev-env");
-				}
+				envFile = checkEnvsPath(envFile, root.getAbsolutePath());
 				File file = new File(envFile);
 				if (!file.exists())
 					file = new File(root.getCanonicalPath() + ConstUtils.SLASH + envFile);
