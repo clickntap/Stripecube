@@ -190,6 +190,22 @@ public class BeanErrors {
 		}
 	}
 
+	public void assertLength(String propertyName, int minLen, int maxLen) throws Exception {
+		Object value = BeanUtils.getValue(target, propertyName);
+		if (value != null && !value.equals("")) {
+			try {
+				if (value.toString().length() < minLen) {
+					errors.rejectValue(propertyName, "tooShort");
+				}
+				if (value.toString().length() > maxLen) {
+					errors.rejectValue(propertyName, "tooLong");
+				}
+			} catch (Exception e) {
+				errors.rejectValue(propertyName, "bad");
+			}
+		}
+	}
+
 	public void assertPhoneNumber(String propertyName) throws Exception {
 		assertPhoneNumber(propertyName, Integer.MAX_VALUE);
 	}
