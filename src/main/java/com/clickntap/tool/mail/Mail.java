@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -40,7 +41,7 @@ public class Mail {
 	protected List<String> to = new ArrayList<String>();
 	protected List<String> cc = new ArrayList<String>();
 	protected List<String> bcc = new ArrayList<String>();
-	protected List<String> attachs = new ArrayList<String>();
+	protected List<DataSource> attachs = new ArrayList<DataSource>();
 	protected List<String> resources = new ArrayList<String>();
 	protected String subject = ConstUtils.EMPTY;
 	protected List<Body> bodies = new ArrayList<Body>();
@@ -119,15 +120,21 @@ public class Mail {
 	}
 
 	public void addAttach(String file) {
-		this.attachs.add(file);
+		addAttach(new FileDataSource(file));
+	}
+
+	public void addAttach(DataSource dataSource) {
+		this.attachs.add(dataSource);
 	}
 
 	public void addAttachs(List<String> attachs) {
-		this.attachs.addAll(attachs);
+		for (String file : attachs) {
+			addAttach(file);
+		}
 	}
 
 	public void resetAttachs() {
-		this.attachs = new ArrayList<String>();
+		this.attachs = new ArrayList<DataSource>();
 	}
 
 	public void addResource(String file) {
@@ -170,7 +177,7 @@ public class Mail {
 		java.util.Properties p = new java.util.Properties();
 
 		SmtpAuthenticator authenticator = null;
-		
+
 		if (host.equals("localhost"))
 			p.put("mail.host", host);
 		else {
@@ -202,7 +209,7 @@ public class Mail {
 		for (int i = 0; i < bcc.size(); i++)
 			msg.addRecipient(Message.RecipientType.BCC, new InternetAddress((String) bcc.get(i)));
 		MimeBodyPart mbp = null;
-		FileDataSource fds = null;
+		DataSource fds = null;
 		Body body = null;
 		if ((attachs.size() + resources.size() + bodies.size()) > 1) {
 			Multipart mp = null;
@@ -269,7 +276,7 @@ public class Mail {
 			}
 
 			for (int i = 0; i < attachs.size(); i++) {
-				fds = new FileDataSource((String) attachs.get(i));
+				fds = attachs.get(i);
 				mbp = new MimeBodyPart();
 				mbp.setDataHandler(new DataHandler(fds));
 				mbp.setFileName(fds.getName());

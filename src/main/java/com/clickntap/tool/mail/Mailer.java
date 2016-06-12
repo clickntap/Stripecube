@@ -14,6 +14,18 @@ public class Mailer {
 	private String password;
 	private Boolean startTtl;
 	private ScriptEngine scriptEngine;
+	private String prefix;
+
+	public String getPrefix() {
+		if (prefix == null) {
+			prefix = "mail.";
+		}
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
 	public Boolean getStartTtl() {
 		return startTtl;
@@ -69,15 +81,15 @@ public class Mailer {
 	}
 
 	public void setSubject(Mail mail, Map<String, Object> ctx) throws Exception {
-		mail.setSubject(scriptEngine.eval(ctx, "mail." + mail.getKey() + ".subject.txt"));
+		mail.setSubject(scriptEngine.eval(ctx, getPrefix() + mail.getKey() + ".subject.txt"));
 	}
 
 	public void setHtmlBody(Mail mail, Map<String, Object> ctx) throws Exception {
-		mail.addBody(scriptEngine.eval(ctx, "mail." + mail.getKey() + ".htm"), ConstUtils.TEXT_HTML_CONTENT_TYPE);
+		mail.addBody(scriptEngine.eval(ctx, getPrefix() + mail.getKey() + ".htm"), ConstUtils.TEXT_HTML_CONTENT_TYPE);
 	}
 
 	public void setPlainBody(Mail mail, Map<String, Object> ctx) throws Exception {
-		mail.addBody(scriptEngine.eval(ctx, "mail." + mail.getKey() + ".txt"), ConstUtils.TEXT_PLAIN_CONTENT_TYPE);
+		mail.addBody(scriptEngine.eval(ctx, getPrefix() + mail.getKey() + ".txt"), ConstUtils.TEXT_PLAIN_CONTENT_TYPE);
 	}
 
 	public void sendmail(Mail mail) throws Exception {
