@@ -14,6 +14,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,6 +29,8 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.codec.binary.Base64OutputStream;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
@@ -75,6 +78,14 @@ public class ImageUtils {
 		image = ImageIO.read(in);
 		in.close();
 		return image;
+	}
+
+	public static String imageToBase64(BufferedImage image, String format) throws Exception {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		OutputStream b64 = new Base64OutputStream(os);
+		ImageIO.write(image, format, b64);
+		String result = os.toString("UTF-8");
+		return "data:image/" + format + ";base64," + result;
 	}
 
 	public static boolean hasAlpha(Image image) throws Exception {
@@ -322,6 +333,8 @@ public class ImageUtils {
 	public static void saveAsJpeg(BufferedImage image, int quality, OutputStream out) throws Exception {
 		BufferedImage jpeg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D graphics2D = jpeg.createGraphics();
+		graphics2D.setColor(Color.WHITE);
+		graphics2D.fillRect(0, 0, image.getWidth(), image.getHeight());
 		graphics2D.drawImage(image, 0, 0, null);
 		graphics2D.dispose();
 		quality = Math.max(0, Math.min(quality, 100));

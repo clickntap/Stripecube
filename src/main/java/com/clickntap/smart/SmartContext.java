@@ -651,4 +651,14 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 		return pager;
 	}
 
+	public static List asList(JSONArray array) {
+		List items = new ArrayList();
+		if (array != null) {
+			for (int i = 0; i < array.length(); i++) {
+				items.add(array.get(i));
+			}
+		}
+		return items;
+	}
+
 }

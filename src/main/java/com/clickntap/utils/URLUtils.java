@@ -9,6 +9,10 @@ import java.net.URL;
 public class URLUtils {
 
 	public static String getSource(String url, String charsetName) throws Exception {
+		if (url.startsWith("//")) {
+			url = "http:" + url;
+			
+		}
 		String source = null;
 		InputStream in = new URL(url).openStream();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
