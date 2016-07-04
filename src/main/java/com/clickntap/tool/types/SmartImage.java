@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +24,14 @@ public class SmartImage {
 	private int jpegQuality;
 
 	public SmartImage() {
+		jpegQuality = 0;
+	}
+
+	public SmartImage(File file) throws Exception {
+		FileInputStream in = new FileInputStream(file);
+		set(in);
+		load();
+		in.close();
 		jpegQuality = 0;
 	}
 
@@ -181,6 +192,12 @@ public class SmartImage {
 		graphics2D.drawImage(alpha, x, y, null);
 		graphics2D.dispose();
 		return this;
+	}
+
+	public void copyTo(File file) throws Exception {
+		FileOutputStream out = new FileOutputStream(file);
+		copyTo(out);
+		out.close();
 	}
 
 	public void copyTo(OutputStream out) throws Exception {
