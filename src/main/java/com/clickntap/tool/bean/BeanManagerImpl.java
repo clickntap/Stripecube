@@ -275,8 +275,10 @@ public class BeanManagerImpl implements BeanManager {
 	public List exportList(Class beanClass, String fieldName) throws Exception {
 		BeanInfo beanInfo = getBeanInfo(beanClass);
 		List<Bean> beans = jdbcManager.queryScript(beanInfo.getReadListScript(fieldName), null, beanClass);
-		for (Bean bean : beans)
+		for (Bean bean : beans) {
 			bean.setBeanManager(this);
+			bean.setupAfterRead();
+		}
 		return beans;
 	}
 

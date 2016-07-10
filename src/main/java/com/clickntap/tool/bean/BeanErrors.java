@@ -271,6 +271,14 @@ public class BeanErrors {
 		assertGt(propertyName2, propertyName1, propertyName1, "lt");
 	}
 
+	public void assertGt(String propertyName1, String propertyName2, String propertyName) throws Exception {
+		assertGt(propertyName1, propertyName2, propertyName, "gt");
+	}
+
+	public void assertLt(String propertyName1, String propertyName2, String propertyName) throws Exception {
+		assertGt(propertyName2, propertyName1, propertyName, "lt");
+	}
+
 	public void assertUnique(String propertyName) throws Exception {
 		Object value = BeanUtils.getValue(target, propertyName);
 		if (value == null || value.toString().trim().equals(ConstUtils.EMPTY))
@@ -303,7 +311,7 @@ public class BeanErrors {
 				errors.rejectValue(propertyName, error);
 		}
 		if (value1 instanceof Datetime) {
-			if (((Datetime) value1).getTimeInMillis() / 1000 < ((Datetime) value2).getTimeInMillis() / 1000)
+			if (((Datetime) value1).getTimeInMillis() / 1000 <= ((Datetime) value2).getTimeInMillis() / 1000)
 				errors.rejectValue(propertyName, error);
 		}
 		if (value1 instanceof Timestamp) {
