@@ -1,6 +1,9 @@
 package com.clickntap.smart;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -10,6 +13,7 @@ import java.util.Properties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
@@ -51,17 +55,25 @@ public class SmartMessageSource implements MessageSource {
 				code = code.substring(0, x1) + code.substring(x2 + 1);
 			}
 		}
-
 		Properties messages = messagesMap.get(locale.getLanguage());
-
-		if (messages == null) {
-			messages = new Properties();
+		try {
+			System.out.println(messageResource.getFile());
+		} catch (Exception e) {
+		}
+		//if (messages == null) {
+		messages = new Properties();
+		try {
+			InputStream in = new FileInputStream(new File(messageResource.getFile().getAbsolutePath().replace("/message.", "/message_" + locale.getLanguage() + ".")));
+			messages.load(in);
+			in.close();
+		} catch (Exception e) {
 			try {
 				messages.load(messageResource.getInputStream());
-			} catch (IOException e) {
+			} catch (Exception e1) {
 			}
-			messagesMap.put(locale.getLanguage(), messages);
 		}
+		messagesMap.put(locale.getLanguage(), messages);
+		//}
 		String script = null;
 		try {
 			script = (String) messages.getProperty(code);
