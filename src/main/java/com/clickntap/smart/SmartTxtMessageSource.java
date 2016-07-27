@@ -62,7 +62,7 @@ public class SmartTxtMessageSource extends SmartJsonMessageSource {
 						}
 					}
 				}
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			if (!messageSource.getLanguages().containsKey(locale.getLanguage())) {
 				try {
