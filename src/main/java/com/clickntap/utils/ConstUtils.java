@@ -44,6 +44,7 @@ public class ConstUtils {
 	public static final String MINUS = Character.toString(MINUS_CHAR);
 	public static final String COMMA = Character.toString(COMMA_CHAR);
 	public static final String QUOT = Character.toString(QUOT_CHAR);
+	public static final String LOCALE_EN = "en";
 
 	public static boolean isEmpty(Object o) {
 		return o == null || o.toString().trim().equals(EMPTY);

@@ -16,9 +16,10 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
+import com.clickntap.hub.AppSession;
 import com.clickntap.tool.script.ScriptEngine;
 
-public class SmartMessageSource implements MessageSource {
+public class SmartTextMessageSource implements MessageSource {
 
 	protected ScriptEngine scriptEngine;
 
@@ -43,7 +44,17 @@ public class SmartMessageSource implements MessageSource {
 	}
 
 	public String getMessage(String code, Object[] args, Locale locale) throws NoSuchMessageException {
-		locale = new Locale("en");
+		
+		for (Object arg : args) {
+			if (arg instanceof Map) {
+				Object obj = ((Map) arg).get("ws");
+				if (obj instanceof AppSession) {
+					AppSession ws = (AppSession) obj;
+					System.out.println(ws);
+				}
+			}
+		}
+		System.out.println(locale);
 		if (code.contains("[")) {
 			int x1 = 0;
 			int x2 = 0;
@@ -55,20 +66,24 @@ public class SmartMessageSource implements MessageSource {
 			}
 		}
 		Properties messages = messagesMap.get(locale.getLanguage());
-		if (messages == null) {
-			messages = new Properties();
-			try {
-				InputStream in = new FileInputStream(new File(messageResource.getFile().getAbsolutePath().replace("/message.", "/message_" + locale.getLanguage() + ".")));
-				messages.load(in);
-				in.close();
-			} catch (Exception e) {
-				try {
-					messages.load(messageResource.getInputStream());
-				} catch (Exception e1) {
-				}
-			}
-			messagesMap.put(locale.getLanguage(), messages);
+		try {
+			System.out.println(messageResource.getFile());
+		} catch (Exception e) {
 		}
+		//if (messages == null) {
+		messages = new Properties();
+		try {
+			InputStream in = new FileInputStream(new File(messageResource.getFile().getAbsolutePath().replace("/message.", "/message_" + locale.getLanguage() + ".")));
+			messages.load(in);
+			in.close();
+		} catch (Exception e) {
+			try {
+				messages.load(messageResource.getInputStream());
+			} catch (Exception e1) {
+			}
+		}
+		messagesMap.put(locale.getLanguage(), messages);
+		//}
 		String script = null;
 		try {
 			script = (String) messages.getProperty(code);
@@ -76,6 +91,7 @@ public class SmartMessageSource implements MessageSource {
 		}
 		if (script == null) {
 			script = code;
+			// System.out.println(code);
 		}
 		try {
 			if (args != null && args.length > 0) {

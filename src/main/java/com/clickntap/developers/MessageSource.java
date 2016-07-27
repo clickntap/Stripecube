@@ -17,7 +17,7 @@ public class MessageSource {
 	private Map<String, Map<String, String>> languages;
 
 	public MessageSource() {
-
+		languages = new HashMap<String, Map<String, String>>();
 	}
 
 	public MessageSource(String messageProperties, String locale) throws Exception {
