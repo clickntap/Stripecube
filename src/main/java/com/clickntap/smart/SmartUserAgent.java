@@ -24,6 +24,8 @@ public class SmartUserAgent {
 			channel = "mobile";
 		if (ua.indexOf("vodafone") >= 0)
 			channel = "mobile";
+		if (ua.indexOf("android") >= 0)
+			channel = "mobile";
 	}
 
 	public String getChannel() {
