@@ -311,7 +311,7 @@ public class BeanErrors {
 				errors.rejectValue(propertyName, error);
 		}
 		if (value1 instanceof Datetime) {
-			if (((Datetime) value1).getTimeInMillis() / 1000 <= ((Datetime) value2).getTimeInMillis() / 1000)
+			if (((Datetime) value1).getTimeInMillis() / 1000 < ((Datetime) value2).getTimeInMillis() / 1000)
 				errors.rejectValue(propertyName, error);
 		}
 		if (value1 instanceof Timestamp) {
