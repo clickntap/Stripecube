@@ -11,6 +11,7 @@ import org.springframework.context.NoSuchMessageException;
 
 import com.clickntap.developers.MessageSource;
 import com.clickntap.hub.AppSession;
+import com.clickntap.utils.ConstUtils;
 
 import freemarker.template.utility.StringUtil;
 
@@ -36,7 +37,7 @@ public class SmartTxtMessageSource extends SmartJsonMessageSource {
 		} else {
 			f = new File(messageResource.getFile().getAbsolutePath().replace(".txt", "_" + language + ".txt"));
 		}
-		List<String> lines = FileUtils.readLines(f);
+		List<String> lines = FileUtils.readLines(f, ConstUtils.UTF_8);
 		HashMap<String, String> values = new HashMap<String, String>();
 		for (String line : lines) {
 			try {
