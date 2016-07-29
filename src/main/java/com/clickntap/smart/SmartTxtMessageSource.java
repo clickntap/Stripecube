@@ -21,7 +21,7 @@ public class SmartTxtMessageSource extends SmartJsonMessageSource {
 	private MessageSource messageSource;
 
 	public void start() throws Exception {
-		isTxt = true;
+		isTxt = false;
 		if (messageResource.getFile().getName().endsWith(".txt")) {
 			isTxt = true;
 			messageSource = new MessageSource();
