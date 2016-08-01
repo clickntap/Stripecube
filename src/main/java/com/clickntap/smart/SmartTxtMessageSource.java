@@ -41,7 +41,7 @@ public class SmartTxtMessageSource extends SmartJsonMessageSource {
 			try {
 				int x = line.indexOf('=');
 				String key = line.substring(0, x).trim();
-				String value = line.substring(0, x + 1).trim();
+				String value = line.substring(x + 1).trim();
 				values.put(key, value);
 			} catch (Exception e) {
 			}
