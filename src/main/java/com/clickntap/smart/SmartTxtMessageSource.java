@@ -13,8 +13,6 @@ import com.clickntap.developers.MessageSource;
 import com.clickntap.hub.AppSession;
 import com.clickntap.utils.ConstUtils;
 
-import freemarker.template.utility.StringUtil;
-
 public class SmartTxtMessageSource extends SmartJsonMessageSource {
 
 	private boolean isTxt;
@@ -41,9 +39,9 @@ public class SmartTxtMessageSource extends SmartJsonMessageSource {
 		HashMap<String, String> values = new HashMap<String, String>();
 		for (String line : lines) {
 			try {
-				String[] parts = StringUtil.split(line, '=');
-				String key = parts[0].trim();
-				String value = parts[1].trim();
+				int x = line.indexOf('=');
+				String key = line.substring(0, x).trim();
+				String value = line.substring(0, x + 1).trim();
 				values.put(key, value);
 			} catch (Exception e) {
 			}
