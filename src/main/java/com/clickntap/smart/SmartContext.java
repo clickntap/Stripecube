@@ -80,7 +80,11 @@ public class SmartContext extends HashMap<String, Object> implements Serializabl
 					request.getSession().setAttribute(SMART_SESSION_KEY, param("smartSession"));
 				}
 			}
-			activeSessionKey = (String) request.getSession().getAttribute(SMART_SESSION_KEY);
+			try {
+				activeSessionKey = (String) request.getSession().getAttribute(SMART_SESSION_KEY);
+			} catch (Exception e1) {
+				activeSessionKey = null;
+			}
 			if ("removeSmartSession".equals(param("action"))) {
 				request.getSession().removeAttribute(SMART_SESSION_KEY);
 				activeSessions.remove(activeSessionKey);
