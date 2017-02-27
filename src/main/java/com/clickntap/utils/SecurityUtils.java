@@ -1,5 +1,9 @@
 package com.clickntap.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.security.MessageDigest;
 import java.security.spec.AlgorithmParameterSpec;
 
@@ -10,6 +14,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.input.ReaderInputStream;
 
 import ch.ethz.ssh2.crypto.Base64;
 
@@ -50,29 +55,20 @@ public class SecurityUtils {
 		return kgen.generateKey();
 	}
 
-	//
-	// public static String smartmd5(String s) throws Exception {
-	// byte[] defaultBytes = s.getBytes(ConstUtils.UTF_8);
-	// MessageDigest algorithm = MessageDigest.getInstance("MD5");
-	// algorithm.reset();
-	// algorithm.update(defaultBytes);
-	// byte messageDigest[] = algorithm.digest();
-	// StringBuffer hexString = new StringBuffer();
-	// for (int i = 0; i < messageDigest.length; i++) {
-	// hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-	// }
-	// return hexString.toString();
-	// }
-
 	private static String encode(String s, String encoding) throws Exception {
 		MessageDigest md = MessageDigest.getInstance(encoding);
 		md.reset();
-		md.update(s.getBytes("utf8"));
+		md.update(s.getBytes(ConstUtils.UTF_8));
 		return new String(Hex.encodeHex(md.digest()));
 	}
 
 	public static String md5(String s) throws Exception {
-		return encode(s, "MD5");
+		StringReader reader = new StringReader(s);
+		ReaderInputStream in = new ReaderInputStream(reader);
+		String md5 = md5(in);
+		in.close();
+		reader.close();
+		return md5;
 	}
 
 	public static String sha1(String s) throws Exception {
@@ -84,11 +80,32 @@ public class SecurityUtils {
 	}
 
 	public static String base64enc(String s) throws Exception {
-		return new String(Base64.encode(s.getBytes("utf8")));
+		return new String(Base64.encode(s.getBytes(ConstUtils.UTF_8)));
 	}
 
 	public static String base64dec(String s) throws Exception {
-		return new String(Base64.decode(s.toCharArray()), "utf8");
+		return new String(Base64.decode(s.toCharArray()), ConstUtils.UTF_8);
+	}
+
+	public static String md5(File f) throws Exception {
+		String md5;
+		InputStream in = new FileInputStream(f);
+		md5 = SecurityUtils.md5(in);
+		in.close();
+		return md5;
+	}
+
+	public static String md5(InputStream in) throws Exception {
+		byte[] buffer = new byte[1024];
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		int numRead;
+		do {
+			numRead = in.read(buffer);
+			if (numRead > 0) {
+				md.update(buffer, 0, numRead);
+			}
+		} while (numRead != -1);
+		return new String(Hex.encodeHex(md.digest()));
 	}
 
 	public static void main(String args[]) throws Exception {
