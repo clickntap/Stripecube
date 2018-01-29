@@ -1,2 +1,2 @@
-Stripecube
+ClickFramework
 ==========
