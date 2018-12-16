@@ -46,6 +46,7 @@ public class JdbcManager {
 		JdbcParams params = new JdbcParams(object);
 		List resultList = null;
 		String sql = evalScript(script, params, object);
+		System.out.println(sql);
 		if (!ConstUtils.EMPTY.equals(sql))
 			resultList = jdbcTemplate.query(sql, params.toArray(), mapper);
 		params.close();
@@ -73,6 +74,13 @@ public class JdbcManager {
 	private List query(String script, Object object, Class beanClass, JdbcParams params) {
 		List resultList = null;
 		String sql = evalScript(script, params, object);
+		System.out.println(sql);
+		for (Object param : params.getParams()) {
+			System.out.print(" / ");
+			System.out.print(param);
+		}
+		System.out.println();
+
 		if (!ConstUtils.EMPTY.equals(sql)) {
 			if (log.isDebugEnabled()) {
 				log.debug("template sql: " + sql);
